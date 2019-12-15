@@ -1,0 +1,25 @@
+;
+; Copyright © 2019 Peter Monks Some Rights Reserved
+;
+; This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+; To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/ or send a
+; letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+;
+
+{:deps {clojure2d                      #:mvn {:version "1.1.0"}
+        org.clojure/math.combinatorics #:mvn {:version "0.1.6"}},
+ :aliases
+   {:ancient
+     {:extra-deps
+       {olical/depot #:mvn {:version "1.8.4"}}
+      :main-opts     ["-m" "depot.outdated.main"]}   ; To use, run: clj -Aancient -a ancient
+    :rebl
+     {:extra-deps
+       {org.clojure/core.async      #:mvn {:version "0.4.500"},
+        org.openjfx/javafx-controls #:mvn {:version "13"},
+        org.openjfx/javafx-swing    #:mvn {:version "13"},
+        org.openjfx/javafx-web      #:mvn {:version "13"},
+        org.openjfx/javafx-fxml     #:mvn {:version "13"},
+        org.clojure/clojure         #:mvn {:version "1.10.1"},
+        com.cognitect/rebl          #:local {:root "../REBL-0.9.220/REBL-0.9.220.jar"}}}  ; To use, run: clj -R:rebl -m cognitect.rebl
+    }}
