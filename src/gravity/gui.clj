@@ -26,7 +26,8 @@
     (Thread/sleep 5000)   ; Give the user a chance to open the window before the simulation runs
     (loop [objs objs]
       (doall (map draw-fn objs))
-      (Thread/sleep (/ 1000 120))  ; approximate 120 fps
+      (Thread/sleep 10)
+;      (Thread/sleep (/ 1000 250))  ; approximate 250 fps
       (if (c2d/key-pressed? w)   ; If a key was pressed, close window and return
         (c2d/close-window w)
         (recur (gc/step-simul objs))))))

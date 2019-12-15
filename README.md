@@ -20,8 +20,6 @@ To run another random simulation, with between 3 and 25 randomly located objects
 (gg/simulate width height (gen-random-objs 3 25))
 ```
 
-You may redefine `width` and/or `height` (both integers) to obtain a larger window (the default is 800x600).
-
 ## Contributor Information
 
 [GitHub project](https://github.com/pmonks/gravity)

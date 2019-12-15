@@ -15,8 +15,8 @@
   (+ mini (rand-int (inc (- maxi mini)))))
 
 ; Graphics stuff
-(def width  800)
-(def height 600)
+(def width  (clojure2d.core/screen-width))
+(def height (clojure2d.core/screen-height))
 ;(def colours clojure2d.color/named-colors-list)
 (def colours [:red       :orange      :yellow      :green     :blue       :indigo :violet
               :darkred   :darkorange  :brown       :darkgreen :darkblue           :dark-violet
@@ -39,5 +39,5 @@
        :x-vel  (- (rand max-starting-vel) half-max-starting-vel)
        :y-vel  (- (rand max-starting-vel) half-max-starting-vel)})))
 
-; Run a simulation with between 3 and 25 random objects
-(gg/simulate width height (gen-random-objs 3 25))
+; Run a simulation with a random number of randomly placed objects
+(gg/simulate width height (gen-random-objs 15 50))

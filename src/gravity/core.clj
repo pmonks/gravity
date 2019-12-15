@@ -17,7 +17,7 @@
 (defn square-distance
   "The distance, squared, between o1 and o2."
   [o1 o2]
-  (max 4  ; Clamp the minimum distance, to reduce "ejections"
+  (max 5  ; Clamp the minimum distance, to reduce "ejections"
        (+ (sq (- (:x o2) (:x o1)))
           (sq (- (:y o2) (:y o1))))))
 
@@ -31,7 +31,7 @@
    1. magnitude of gravitational force
    2. direction of gravitational force (radians)"
   [o1 o2]
-  [(/ (* (:mass o1) (:mass o2)) (square-distance o1 o2))
+  [(/ (* (:mass o1) (:mass o2) 1.5) (square-distance o1 o2))   ; Use mass X 1.5 to create stronger attraction
    (Math/atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
@@ -77,7 +77,7 @@
       (dissoc (assoc obj
                      :x      (+ (:x obj)     (:x-vel obj))
                      :y      (+ (:y obj)     (:y-vel obj))
-                     :x-vel  (max -1.0 (min 1.0 (+ (:x-vel obj) (:x-accel obj))))   ; Clamp velocity to the range -1.0 to 1.0
-                     :y-vel  (max -1.0 (min 1.0 (+ (:y-vel obj) (:y-accel obj)))))  ; Clamp velocity to the range -1.0 to 1.0
+                     :x-vel  (max -1.25 (min 1.25 (+ (:x-vel obj) (:x-accel obj))))   ; Clamp velocity to the range -1.25 to 1.25
+                     :y-vel  (max -1.25 (min 1.25 (+ (:y-vel obj) (:y-accel obj)))))  ; Clamp velocity to the range -1.25 to 1.25
               :x-accel
               :y-accel))))
