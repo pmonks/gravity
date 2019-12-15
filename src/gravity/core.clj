@@ -9,6 +9,10 @@
 (ns gravity.core
   (:require [clojure.math.combinatorics :as comb]))
 
+(def G            1.5)     ; Our version of the gravitational constant
+(def min-distance 4)       ; Minimum "allowed" distance between objects (to minimise ejections)
+(def speed-limit  1.5)     ; Maximum allowed rectilinear velocity, in either dimension
+
 (defn sq
   "The square of x."
   [x]
@@ -17,7 +21,7 @@
 (defn square-distance
   "The distance, squared, between o1 and o2."
   [o1 o2]
-  (max 5  ; Clamp the minimum distance, to reduce "ejections"
+  (max min-distance  ; Clamp the minimum distance, to reduce "ejections"
        (+ (sq (- (:x o2) (:x o1)))
           (sq (- (:y o2) (:y o1))))))
 
@@ -31,7 +35,7 @@
    1. magnitude of gravitational force
    2. direction of gravitational force (radians)"
   [o1 o2]
-  [(/ (* (:mass o1) (:mass o2) 1.5) (square-distance o1 o2))   ; Use mass X 1.5 to create stronger attraction
+  [(* G (/ (* (:mass o1) (:mass o2)) (square-distance o1 o2)))
    (Math/atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
@@ -75,9 +79,9 @@
                                     (keys accelerations-per-obj))]
     (for [obj net-accelerations]
       (dissoc (assoc obj
-                     :x      (+ (:x obj)     (:x-vel obj))
-                     :y      (+ (:y obj)     (:y-vel obj))
-                     :x-vel  (max -1.25 (min 1.25 (+ (:x-vel obj) (:x-accel obj))))   ; Clamp velocity to the range -1.25 to 1.25
-                     :y-vel  (max -1.25 (min 1.25 (+ (:y-vel obj) (:y-accel obj)))))  ; Clamp velocity to the range -1.25 to 1.25
+                     :x      (+ (:x obj) (:x-vel obj))
+                     :y      (+ (:y obj) (:y-vel obj))
+                     :x-vel  (max (* -1 speed-limit) (min speed-limit (+ (:x-vel obj) (:x-accel obj))))
+                     :y-vel  (max (* -1 speed-limit) (min speed-limit (+ (:y-vel obj) (:y-accel obj)))))
               :x-accel
               :y-accel))))

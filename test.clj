@@ -27,7 +27,7 @@
   [mini maxi]
   (let [border                (/ (min width height) 6)
         min-starting-mass     1
-        max-starting-mass     4
+        max-starting-mass     10
         max-starting-vel      0.5
         half-max-starting-vel (/ max-starting-vel 2)]
     (for [i (range (rand-int-in-range mini maxi))]
@@ -40,4 +40,4 @@
        :y-vel  (- (rand max-starting-vel) half-max-starting-vel)})))
 
 ; Run a simulation with a random number of randomly placed objects
-(gg/simulate width height (gen-random-objs 15 50))
+(gg/simulate width height (gen-random-objs 5 25))
