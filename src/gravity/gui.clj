@@ -13,21 +13,25 @@
 (defn draw-obj
   [c obj]
   (c2d/with-canvas-> c
-;    (c2d/set-background :black)  ; This isn't smooth at all...
     (c2d/set-color (get obj :colour :white))
     (c2d/ellipse (:x obj) (:y obj) (* 2 (:mass obj)) (* 2 (:mass obj)))))
 
 (defn simulate
   [width height objs]
-  (let [c       (c2d/canvas width height)
-        w       (c2d/show-window {:canvas c :window-name "Gravity Simulation" :always-on-top? true :background :black})
-        draw-fn (partial draw-obj c)]
+  ; Create a window, draw the initial objects, then ...
+  (let [c        (c2d/canvas width height)
+        w        (c2d/show-window {:canvas c :window-name "Gravity Simulation" :always-on-top? true :background :black})
+        draw-fn  (partial draw-obj c)
+        ]
     (doall (map draw-fn objs))
-    (Thread/sleep 5000)   ; Give the user a chance to open the window before the simulation runs
+    (Thread/sleep 5000)   ; ...give the user a chance to open the window before the simulation runs, then...
+
+    ; ...run the simulation...
     (loop [objs objs]
+      (c2d/with-canvas-> c
+        (c2d/set-background :black))
       (doall (map draw-fn objs))
       (Thread/sleep 10)
-;      (Thread/sleep (/ 1000 250))  ; approximate 250 fps
-      (if (c2d/key-pressed? w)   ; If a key was pressed, close window and return
+      (if (c2d/key-pressed? w)   ; ...until a key is pressed.
         (c2d/close-window w)
-        (recur (gc/step-simul objs))))))
+        (recur (gc/step-simul objs true 0 0 width height))))))

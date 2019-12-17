@@ -11,7 +11,7 @@
 
 (def G            1.5)     ; Our version of the gravitational constant
 (def min-distance 4)       ; Minimum "allowed" distance between objects (to minimise ejections)
-(def speed-limit  1.5)     ; Maximum allowed rectilinear velocity, in either dimension
+(def speed-limit  2)       ; Maximum allowed rectilinear velocity, in either dimension
 
 (defn sq
   "The square of x."
@@ -66,22 +66,44 @@
    {:obj   obj2
     :accel (accel-rect obj2 obj1)}])
 
+(defn pmapcat
+  [f batches]
+  (->> batches
+       (pmap f)
+       (apply concat)
+       doall))
+
 (def sum (partial apply +))
 
 (defn step-simul
   "Produces a new set of objects, based on the gravitational force the input set of objects apply on each other.
    Note: this is not a physically accurate algorithm; it's simply fun to play with."
-  [objs]
-  (let [pairwise-accelerations (mapcat step-simul-pair (comb/combinations objs 2))
-        accelerations-per-obj  (group-by :obj pairwise-accelerations)
-        net-accelerations      (map #(assoc % :x-accel (sum (map (fn [x] (first  (:accel x))) (get accelerations-per-obj %)))
-                                              :y-accel (sum (map (fn [x] (second (:accel x))) (get accelerations-per-obj %))))
-                                    (keys accelerations-per-obj))]
-    (for [obj net-accelerations]
-      (dissoc (assoc obj
-                     :x      (+ (:x obj) (:x-vel obj))
-                     :y      (+ (:y obj) (:y-vel obj))
-                     :x-vel  (max (* -1 speed-limit) (min speed-limit (+ (:x-vel obj) (:x-accel obj))))
-                     :y-vel  (max (* -1 speed-limit) (min speed-limit (+ (:y-vel obj) (:y-accel obj)))))
-              :x-accel
-              :y-accel))))
+  ([objs] (step-simul objs false nil nil nil nil))
+  ([objs bounce-at-edge? min-x min-y max-x max-y]
+   (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
+         accelerations-per-obj  (group-by :obj pairwise-accelerations)
+         net-accelerations      (pmap #(assoc % :x-accel (sum (map (fn [x] (first  (:accel x))) (get accelerations-per-obj %)))
+                                                :y-accel (sum (map (fn [x] (second (:accel x))) (get accelerations-per-obj %))))
+                                      (keys accelerations-per-obj))]
+     (pmap #(let [new-x     (+ (:x %) (:x-vel %))
+                  new-y     (+ (:y %) (:y-vel %))
+                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ (:x-vel %) (:x-accel %))))
+                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ (:y-vel %) (:y-accel %))))]
+              (dissoc
+                (assoc % :x     new-x
+                         :y     new-y
+                         :x-vel (* new-x-vel
+                                   (if (and bounce-at-edge?
+                                            (or (and (< new-x min-x) (neg? new-x-vel))
+                                                (and (> new-x max-x) (pos? new-x-vel))))
+                                     -1
+                                     1))
+                         :y-vel (* new-y-vel
+                                   (if (and bounce-at-edge?
+                                            (or (and (< new-y min-y) (neg? new-y-vel))
+                                                (and (> new-y max-y) (pos? new-y-vel))))
+                                     -1
+                                     1)))
+                :x-accel
+                :y-accel))
+           net-accelerations))))

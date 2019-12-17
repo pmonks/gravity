@@ -15,8 +15,8 @@
   (+ mini (rand-int (inc (- maxi mini)))))
 
 ; Graphics stuff
-(def width  (clojure2d.core/screen-width))
-(def height (clojure2d.core/screen-height))
+(def width  (- (clojure2d.core/screen-width) 50))
+(def height (- (clojure2d.core/screen-height) 50))
 ;(def colours clojure2d.color/named-colors-list)
 (def colours [:red       :orange      :yellow      :green     :blue       :indigo :violet
               :darkred   :darkorange  :brown       :darkgreen :darkblue           :dark-violet
