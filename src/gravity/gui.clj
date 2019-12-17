@@ -10,28 +10,36 @@
   (:require [clojure2d.core :as c2d]
             [gravity.core   :as gc]))
 
+(defn circle
+  [c x y r colour]
+  (c2d/with-canvas-> c
+    (c2d/set-color colour)
+    (c2d/ellipse x y r r)))
+
 (defn draw-obj
   [c obj]
-  (c2d/with-canvas-> c
-    (c2d/set-color (get obj :colour :white))
-    (c2d/ellipse (:x obj) (:y obj) (* 2 (:mass obj)) (* 2 (:mass obj)))))
+  (circle c (:x obj) (:y obj) (* 2 (:mass obj)) (get obj :colour :white)))
+
+(defn erase-obj
+  [c obj]
+  (circle c (:x obj) (:y obj) (+ 2 (* 2 (:mass obj))) :black))
 
 (defn simulate
   [width height objs]
   ; Create a window, draw the initial objects, then ...
   (let [c        (c2d/canvas width height)
-        w        (c2d/show-window {:canvas c :window-name "Gravity Simulation" :always-on-top? true :background :black})
-        draw-fn  (partial draw-obj c)
-        ]
+        w        (c2d/show-window {:canvas c :window-name "Gravity Simulation" :background :black})
+        draw-fn  (partial draw-obj  c)
+        erase-fn (partial erase-obj c)]
     (doall (map draw-fn objs))
     (Thread/sleep 5000)   ; ...give the user a chance to open the window before the simulation runs, then...
 
     ; ...run the simulation...
     (loop [objs objs]
-      (c2d/with-canvas-> c
-        (c2d/set-background :black))
       (doall (map draw-fn objs))
-      (Thread/sleep 10)
-      (if (c2d/key-pressed? w)   ; ...until a key is pressed.
-        (c2d/close-window w)
-        (recur (gc/step-simul objs true 0 0 width height))))))
+      (Thread/sleep 5)
+      (let [new-objs (gc/step-simul objs true 0 0 width height)]
+        (doall (map erase-fn objs))
+        (if (c2d/key-pressed? w)   ; ...until a key is pressed.
+          (c2d/close-window w)
+          (recur new-objs))))))

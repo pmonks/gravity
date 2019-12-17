@@ -41,3 +41,20 @@
 
 ; Run a simulation with a random number of randomly placed objects
 (gg/simulate width height (gen-random-objs 5 25))
+
+; Co-orbiters
+(comment
+(gg/simulate width height
+  [{:colour :yellow
+    :mass   50
+    :x      (/ width 2)
+    :y      (/ height 2)
+    :x-vel  -0.06
+    :y-vel  0.0}
+   {:colour :light-blue
+    :mass   5
+    :x      (/ width 2)
+    :y      (- (/ height 2) 200)
+    :x-vel  0.6
+    :y-vel  0.0}])
+)
