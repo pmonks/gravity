@@ -39,22 +39,27 @@
        :x-vel  (- (rand max-starting-vel) half-max-starting-vel)
        :y-vel  (- (rand max-starting-vel) half-max-starting-vel)})))
 
+(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window and be dropped into a REPL...")
+(flush)
+
 ; Run a simulation with a random number of randomly placed objects
-(gg/simulate width height (gen-random-objs 5 25))
+(gg/simulate width height (gen-random-objs 10 25))
+
+(println)
 
 ; Co-orbiters
 (comment
 (gg/simulate width height
-  [{:colour :yellow
+  [{:colour :yellow       ; ☀️
     :mass   50
     :x      (/ width 2)
     :y      (/ height 2)
     :x-vel  -0.06
     :y-vel  0.0}
-   {:colour :light-blue
+   {:colour :light-blue   ; 🌏
     :mass   5
     :x      (/ width 2)
     :y      (- (/ height 2) 200)
-    :x-vel  0.6
+    :x-vel  0.8
     :y-vel  0.0}])
 )
