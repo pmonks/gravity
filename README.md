@@ -8,7 +8,7 @@ in order to produce some pretty (though unrealistic) animations.
 Clone the repo, then run:
 
 ```shell
-$ clj -i test.clj -r
+$ clj -i init.clj -r
 ```
 
 Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press

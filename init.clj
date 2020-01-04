@@ -46,6 +46,7 @@
 (gg/simulate width height (gen-random-objs 10 25))
 
 (println)
+(flush)
 
 ; Co-orbiters
 (comment
