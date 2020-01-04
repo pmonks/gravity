@@ -2,9 +2,11 @@
 # gravity
 
 A micro codebase that plays around with some mathematically dubious riffs on Newton's law of universal gravitation,
-in order to produce some pretty (though unrealistic) animations.
+in order to produce some pretty (though unrealistic) animations:
 
 ![Demo](demo.gif?raw=true "Demo")
+
+Note: actual animation is smoother than what's shown in this screenshot.
 
 ## Trying it Out
 Clone the repo, then run:
