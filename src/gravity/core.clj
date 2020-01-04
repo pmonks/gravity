@@ -9,9 +9,10 @@
 (ns gravity.core
   (:require [clojure.math.combinatorics :as comb]))
 
-(def G            1.5)     ; Our version of the gravitational constant
-(def min-distance 4)       ; Minimum "allowed" distance between objects (to minimise ejections)
-(def speed-limit  2)       ; Maximum allowed rectilinear velocity, in either dimension
+(def G                 1.5)     ; Our version of the gravitational constant
+(def min-distance      4)       ; Minimum "allowed" distance between objects (to minimise ejections)
+(def speed-limit       2)       ; Maximum allowed rectilinear velocity, in either dimension
+(def mass-factor       2)       ; Multiplier for mass
 
 (defn sq
   "The square of x."
@@ -30,12 +31,16 @@
   [rad]
   (* rad (/ 180 Math/PI)))
 
+(defn mass
+  [o]
+  (* mass-factor (:mass o)))
+
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:
    1. magnitude of gravitational force
    2. direction of gravitational force (radians)"
   [o1 o2]
-  [(* G (/ (* (:mass o1) (:mass o2)) (square-distance o1 o2)))
+  [(* G (/ (* (mass o1) (mass o2)) (square-distance o1 o2)))
    (Math/atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
@@ -54,8 +59,8 @@
    2. acceleration in vertical (Y) plane"
   [o1 o2]
   (let [gf (g-force-rect o1 o2)]
-    [(/ (first  gf) (:mass o1))
-     (/ (second gf) (:mass o1))]))
+    [(/ (first  gf) (mass o1))
+     (/ (second gf) (mass o1))]))
 
 (defn step-simul-pair
   "Returns the accelerations obj1 and obj2 have on each other, as a vector of 2 elements,
