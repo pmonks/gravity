@@ -4,6 +4,8 @@
 A micro codebase that plays around with some mathematically dubious riffs on Newton's law of universal gravitation,
 in order to produce some pretty (though unrealistic) animations.
 
+![Demo](demo.gif?raw=true "Demo")
+
 ## Trying it Out
 Clone the repo, then run:
 
