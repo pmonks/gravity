@@ -31,9 +31,29 @@
   [rad]
   (* rad (/ 180 Math/PI)))
 
+(defn pow-fn
+  [x y]
+  (Math/pow x y))
+(def pow (memoize pow-fn))
+
+(defn atan2-fn
+  [x y]
+  (Math/atan2 x y))
+(def atan2 (memoize atan2-fn))
+
+(defn cos-fn
+  [x]
+  (Math/cos x))
+(def cos (memoize cos-fn))
+
+(defn sin-fn
+  [x]
+  (Math/sin x))
+(def sin (memoize sin-fn))
+
 (defn mass
   [o]
-  (Math/pow (:mass o) mass-factor))
+  (pow (:mass o) mass-factor))
 
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:
@@ -41,7 +61,7 @@
    2. direction of gravitational force (radians)"
   [o1 o2]
   [(* G (/ (* (mass o1) (mass o2)) (square-distance o1 o2)))
-   (Math/atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
+   (atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
   "Returns gravitational force between two 'objects' as a rectilinear vector of 2 elements:
@@ -51,7 +71,7 @@
   (let [gf  (g-force-polar o1 o2)
         mag (first  gf)
         dir (second gf)]
-    [(* mag (Math/cos dir)) (* mag (Math/sin dir))]))
+    [(* mag (cos dir)) (* mag (sin dir))]))
 
 (defn accel-rect
   "The acceleration of o1 due to o2 as a rectilinear vector of 2 elements:
