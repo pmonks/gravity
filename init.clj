@@ -57,10 +57,10 @@
     :y      (/ height 2)
     :x-vel  -0.06
     :y-vel  0.0}
-   {:colour :light-blue   ; 🌏
+   {:colour :blue   ; 🌏
     :mass   5
     :x      (/ width 2)
     :y      (- (/ height 2) 200)
-    :x-vel  0.8
+    :x-vel  1.0
     :y-vel  0.0}])
 )
