@@ -31,29 +31,26 @@
   [rad]
   (* rad (/ 180 Math/PI)))
 
-(defn pow-fn
+(defn pow
   [x y]
   (Math/pow x y))
-(def pow (memoize pow-fn))
+(def pow-mem (memoize pow))
 
-(defn atan2-fn
+(defn atan2
   [x y]
   (Math/atan2 x y))
-(def atan2 (memoize atan2-fn))
 
-(defn cos-fn
+(defn cos
   [x]
   (Math/cos x))
-(def cos (memoize cos-fn))
 
-(defn sin-fn
+(defn sin
   [x]
   (Math/sin x))
-(def sin (memoize sin-fn))
 
 (defn mass
   [o]
-  (pow (:mass o) mass-factor))
+  (pow-mem (:mass o) mass-factor))
 
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:
