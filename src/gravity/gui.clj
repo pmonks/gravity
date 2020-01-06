@@ -28,20 +28,21 @@
   "Displays a countdown timer in the top right corner for s seconds (defaults to 5 if not provided)."
   ([c] (countdown c 5))
   ([c s]
-   (doall (for [x (map inc (reverse (range s)))]
-     (let [old-text-width (c2d/with-canvas-> c
-                            (c2d/set-font-attributes 50 :bold)
-                            (c2d/text-width (str (inc x))))]
-       (c2d/with-canvas-> c
-         (c2d/set-font-attributes 50 :bold)
-         ; Erase old counter
-         (c2d/set-color :black)
-         (c2d/rect 10 10 (+ 10 old-text-width) 50)
-         ; Draw new counter
-         (c2d/set-color :white)
-         (c2d/text (str x) 10 50))
-       ; Sleep for 1 second
-       (Thread/sleep 1000))))
+   (doall
+     (for [x (map inc (reverse (range s)))]
+       (let [old-text-width (c2d/with-canvas-> c
+                              (c2d/set-font-attributes 50 :bold)
+                              (c2d/text-width (str (inc x))))]
+         (c2d/with-canvas-> c
+           (c2d/set-font-attributes 50 :bold)
+           ; Erase old counter
+           (c2d/set-color :black)
+           (c2d/rect 10 10 (+ 10 old-text-width) 50)
+           ; Draw new counter
+           (c2d/set-color :white)
+           (c2d/text (str x) 10 50))
+         ; Sleep for 1 second
+         (Thread/sleep 1000))))
    (c2d/with-canvas-> c
      (c2d/set-color :black)
      (c2d/rect 0 0 60 60))))
