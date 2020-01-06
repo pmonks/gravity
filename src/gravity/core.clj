@@ -10,9 +10,9 @@
   (:require [clojure.math.combinatorics :as comb]))
 
 (def G                 1.5)     ; Our version of the gravitational constant
-(def min-distance      4)       ; Minimum "allowed" distance between objects (to minimise ejections)
+(def min-distance      10)      ; Minimum "allowed" distance between objects (to minimise ejections)
 (def speed-limit       2)       ; Maximum allowed rectilinear velocity, in either dimension
-(def mass-factor       2)       ; Multiplier for mass
+(def mass-factor       1.25)     ; Exponent for mass
 
 (defn sq
   "The square of x."
@@ -33,7 +33,7 @@
 
 (defn mass
   [o]
-  (* mass-factor (:mass o)))
+  (Math/pow (:mass o) mass-factor))
 
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:

@@ -28,7 +28,7 @@
   (let [border                (/ (min width height) 6)
         min-starting-mass     1
         max-starting-mass     10
-        max-starting-vel      0.5
+        max-starting-vel      2
         half-max-starting-vel (/ max-starting-vel 2)]
     (for [i (range (rand-int-in-range mini maxi))]
       {
