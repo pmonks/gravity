@@ -20,8 +20,8 @@
 (defn draw-obj
   "Draws an 'object', erasing it from its previous location (if it had one)"
   [c obj]
-  (if (and (:old-x obj) (:old-y obj))
-    (circle c (:old-x obj) (:old-y obj) (+ 2 (* 2 (:mass obj))) :black))    ; Erase object at old location
+  (if (and (::old-x obj) (::old-y obj))
+    (circle c (::old-x obj) (::old-y obj) (+ 2 (* 2 (:mass obj))) :black))    ; Erase object at old location
   (circle c (:x obj) (:y obj) (* 2 (:mass obj)) (get obj :colour :white)))  ; Draw object at new location
 
 (defn countdown
@@ -61,7 +61,7 @@
     ; ...run the simulation...
     (loop [objs objs]
       (doall (map draw-fn objs))
-      (let [objs     (map #(assoc % :old-x (:x %) :old-y (:y %)) objs)  ; Save previous locations (for erasing)
+      (let [objs     (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
             new-objs (gc/step-simul objs true 0 0 width height)]
         (Thread/sleep 5)
         (if (c2d/key-pressed? w)   ; ...until a key is pressed.

@@ -84,9 +84,9 @@
   each of which is a map containing the obj (:obj) and the acceleration (as per accel-rect) it is experiencing (:accel)."
   [[obj1 obj2]]
   [{:obj   obj1
-    :accel (accel-rect obj1 obj2)}
+    ::accel (accel-rect obj1 obj2)}
    {:obj   obj2
-    :accel (accel-rect obj2 obj1)}])
+    ::accel (accel-rect obj2 obj1)}])
 
 (defn pmapcat
   [f batches]
@@ -104,28 +104,25 @@
   ([objs bounce-at-edge? min-x min-y max-x max-y]
    (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
          accelerations-per-obj  (group-by :obj pairwise-accelerations)
-         net-accelerations      (pmap #(assoc % :x-accel (sum (map (fn [x] (first  (:accel x))) (get accelerations-per-obj %)))
-                                                :y-accel (sum (map (fn [x] (second (:accel x))) (get accelerations-per-obj %))))
+         net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
+                                                ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
                                       (keys accelerations-per-obj))]
      (pmap #(let [new-x     (+ (:x %) (:x-vel %))
                   new-y     (+ (:y %) (:y-vel %))
-                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ (:x-vel %) (:x-accel %))))
-                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ (:y-vel %) (:y-accel %))))]
-              (dissoc
-                (assoc % :x     new-x
-                         :y     new-y
-                         :x-vel (* new-x-vel
-                                   (if (and bounce-at-edge?
-                                            (or (and (< new-x min-x) (neg? new-x-vel))
-                                                (and (> new-x max-x) (pos? new-x-vel))))
-                                     -1
-                                     1))
-                         :y-vel (* new-y-vel
-                                   (if (and bounce-at-edge?
-                                            (or (and (< new-y min-y) (neg? new-y-vel))
-                                                (and (> new-y max-y) (pos? new-y-vel))))
-                                     -1
-                                     1)))
-                :x-accel
-                :y-accel))
+                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ (:x-vel %) (::x-accel %))))
+                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ (:y-vel %) (::y-accel %))))]
+              (assoc % :x     new-x
+                       :y     new-y
+                       :x-vel (* new-x-vel
+                                 (if (and bounce-at-edge?
+                                          (or (and (< new-x min-x) (neg? new-x-vel))
+                                              (and (> new-x max-x) (pos? new-x-vel))))
+                                   -1
+                                   1))
+                       :y-vel (* new-y-vel
+                                 (if (and bounce-at-edge?
+                                          (or (and (< new-y min-y) (neg? new-y-vel))
+                                              (and (> new-y max-y) (pos? new-y-vel))))
+                                   -1
+                                   1))))
            net-accelerations))))
