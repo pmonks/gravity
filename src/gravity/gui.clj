@@ -31,59 +31,30 @@
   [c objs]
   (doall (map (partial draw-obj c) objs)))
 
-(defn countdown
-  "Displays a countdown timer in the top right corner for s seconds (defaults to 5 if not provided)."
-  ([c] (countdown c 5))
-  ([c s]
-   (doall
-     (for [x (map inc (reverse (range s)))]
-       (let [old-text-width (c2d/with-canvas-> c
-                              (c2d/set-font-attributes 50 :bold)
-                              (c2d/text-width (str (inc x))))]
-         (c2d/with-canvas-> c
-           (c2d/set-font-attributes 50 :bold)
-           ; Erase old counter
-           (c2d/set-color :black)
-           (c2d/rect 10 10 (+ 10 old-text-width) 50)
-           ; Draw new counter
-           (c2d/set-color :white)
-           (c2d/text (str x) 10 50))
-         ; Sleep for 1 second
-         (Thread/sleep 1000))))
-   (c2d/with-canvas-> c
-     (c2d/set-color :black)
-     (c2d/rect 0 0 60 60))))
-
 (defn draw-frame
   "Draws one frame of the simulation and then moves it forward"
   [c w f loop-state]
-  (if (or (not (c2d/window-active? w))   ; Quit if the window has been closed...
-          (c2d/key-pressed? w))          ; ...or any key has been pressed
-    (c2d/close-window w))
-  (let [{width :width, height :height, objs :objs, running :running, :as state} (c2d/get-state w)]
-    (if running
+  (let [{width :width, height :height, objs :objs, :as state} (c2d/get-state w)]
+    ; If the window has been closed, or a key pressed, close the window and quit
+    (if (or (not (c2d/window-active? w))
+            (c2d/key-pressed? w))
+      (c2d/close-window w)
+      ; Display one frame of the simulation, then step it
       (do
         (draw-objs c objs)
-        (let [objs     (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
-              new-objs (gc/step-simul objs true 0 0 width height)]          ; Step the simulation
-          (c2d/set-state! w (assoc state :objs new-objs)))))))
+        (let [objs (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
+              objs (gc/step-simul objs true 0 0 width height)]
+          (c2d/set-state! w (assoc state :objs objs))))))
+  nil)
 
 (defn simulate
-  "Opens a window of size width x height and simulates the given set of objects in it, continuing until a key is pressed.
-   Note: this method blocks the caller for 5 seconds (during the countdown), before returning."
+  "Opens a window of size width x height and simulates the given set of objects in it, continuing until the window is
+   closed or a key is pressed.  Returns a handle to the window."
   [width height objs]
-  ; Create a window, draw the initial objects, then ...
-  (let [initial-state {:width           width
-                       :height          height
-                       :objs            objs
-                       :running         false}
-        c             (c2d/canvas width height)
-        w             (c2d/show-window {:canvas      c
-                                        :window-name "Gravity Simulation"
-                                        :background  :black
-                                        :state       initial-state
-                                        :draw-fn     draw-frame})]
-    (draw-objs      c objs)
-    (countdown      c 5)                                      ; ...give the user 5 seconds to focus the window before the simulation runs, then...
-    (c2d/set-state! w (assoc initial-state :running true)))   ; Start the simulation running
-    nil)
+  (c2d/show-window {:canvas      (c2d/canvas width height)
+                    :window-name window-name
+                    :background  :black
+                    :state       {:width   width
+                                  :height  height
+                                  :objs    objs}
+                    :draw-fn     draw-frame}))
