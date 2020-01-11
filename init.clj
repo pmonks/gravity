@@ -43,7 +43,7 @@
 (flush)
 
 ; Run a simulation with a random number of randomly placed objects
-(gg/simulate width height (gen-random-objs 10 25))
+(gg/simulate width height (gen-random-objs 10 50))
 
 (println)
 (flush)
