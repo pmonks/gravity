@@ -108,10 +108,12 @@
          net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
                                                 ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
                                       (keys accelerations-per-obj))]
-     (pmap #(let [new-x     (+ (:x %) (:x-vel %))
-                  new-y     (+ (:y %) (:y-vel %))
-                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ (:x-vel %) (::x-accel %))))
-                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ (:y-vel %) (::y-accel %))))]
+     (pmap #(let [x-vel     (get % :x-vel 0)
+                  y-vel     (get % :y-vel 0)
+                  new-x     (+ (:x %) x-vel 0)
+                  new-y     (+ (:y %) y-vel 0)
+                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ x-vel (::x-accel %))))
+                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))]
               (assoc % :x     new-x
                        :y     new-y
                        :x-vel (* new-x-vel
