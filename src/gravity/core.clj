@@ -50,7 +50,8 @@
 
 (defn mass
   [o]
-  (pow-mem (:mass o) mass-factor))
+  (let [mass (get o :mass 1)]
+    (pow-mem mass mass-factor)))
 
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:
