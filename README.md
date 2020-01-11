@@ -15,8 +15,8 @@ Clone the repo, then run:
 $ clj -i init.clj -r
 ```
 
-Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press
-any key to close the window and be dropped into a REPL.
+Look for the Java GUI window and bring it into focus; an initial random simulation will be running in it.  Press
+any key to close the window.
 
 To run another random simulation, with between 3 and 25 randomly located objects:
 
