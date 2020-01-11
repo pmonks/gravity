@@ -12,26 +12,26 @@
 
 (def window-name "Gravity Simulator")
 
-(defn circle
+(defn- circle
   "Draws a solid, filled circle at location [x y], of radius r, and in colour colour."
   [c x y r colour]
   (c2d/with-canvas-> c
     (c2d/set-color colour)
     (c2d/ellipse x y r r)))
 
-(defn draw-obj
+(defn- draw-obj
   "Draws an 'object', erasing it from its previous location (if it had one)"
   [c obj]
   (if (and (::old-x obj) (::old-y obj))
     (circle c (::old-x obj) (::old-y obj) (+ 2 (* 2 (:mass obj))) :black))    ; Erase object at old location (if we have old coords)
   (circle c (:x obj) (:y obj) (* 2 (:mass obj)) (get obj :colour :white)))    ; Draw object at new location
 
-(defn draw-objs
+(defn- draw-objs
   "Draws all 'objects' in objs"
   [c objs]
   (doall (map (partial draw-obj c) objs)))
 
-(defn draw-frame
+(defn- draw-frame
   "Draws one frame of the simulation and then moves it forward"
   [c w f loop-state]
   (let [{width :width, height :height, objs :objs, :as state} (c2d/get-state w)]
