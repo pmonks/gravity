@@ -41,7 +41,7 @@ another.  Objects are simple maps with these keys (all of which are unitless num
 
 To step the objects, based on the (fudged) forces they exert on one another, the function `gravity.core/step-simul` may
 be called.  The first, mandatory, parameter is the sequence of objects to use as input, and it returns an equivalent
-sequence with all of the objects positions and velocities updated.
+sequence with all of the objects' positions and velocities updated.
 
 The remaining, optional, parameters allow the caller to specify that the objects "bounce" at the edge of a given bounding
 box.  These parameters are:
