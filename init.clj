@@ -28,7 +28,7 @@
   (let [border                (/ (min width height) 6)
         min-starting-mass     1
         max-starting-mass     10
-        max-starting-vel      2
+        max-starting-vel      gc/speed-limit
         half-max-starting-vel (/ max-starting-vel 2)]
     (for [i (range (rand-int-in-range mini maxi))]
       {
@@ -39,7 +39,7 @@
        :x-vel  (- (rand max-starting-vel) half-max-starting-vel)
        :y-vel  (- (rand max-starting-vel) half-max-starting-vel)})))
 
-(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window and be dropped into a REPL...")
+(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
 (flush)
 
 ; Run a simulation with a random number of randomly placed objects
