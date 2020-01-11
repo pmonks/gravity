@@ -39,7 +39,7 @@
        :x-vel  (- (rand double-max-starting-vel) max-starting-vel)
        :y-vel  (- (rand double-max-starting-vel) max-starting-vel)})))
 
-(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
+(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.\n")
 (flush)
 
 ; Run a simulation with a random number of randomly placed objects
