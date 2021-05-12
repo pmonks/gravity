@@ -39,13 +39,13 @@
        :x-vel  (- (rand double-max-starting-vel) max-starting-vel)
        :y-vel  (- (rand double-max-starting-vel) max-starting-vel)})))
 
-(print "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.\n")
+(println "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
 (flush)
 
 ; Run a simulation with a random number of randomly placed objects
 (gg/simulate width height (gen-random-objs 10 50))
 
-(println)
+(println "\nℹ️  To run another simulations of between X and Y random objects, run:\n\n    (gg/simulate width height (gen-random-objs X Y))\n")
 (flush)
 
 ; Co-orbiters
