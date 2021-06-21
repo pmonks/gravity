@@ -14,6 +14,6 @@
                                              :sha     "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
-    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "0.14.0"}}
+    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "0.15.3"}}
                :main-opts ["-m" "antq.core"]}
     }}
