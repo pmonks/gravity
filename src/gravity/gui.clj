@@ -23,31 +23,25 @@
     (c2d/ellipse x y r r)))
 
 (defn- draw-obj
-  "Draws an 'object', erasing it from its previous location (if it had one)"
+  "Draws an 'object'"
   [c obj]
-  (when (and (::old-x obj) (::old-y obj))
-    (circle c (::old-x obj) (::old-y obj) (+ 4 (:mass obj)) :black))    ; Erase object at old location (if we have old coords)
   (circle c (:x obj) (:y obj) (:mass obj) (get obj :colour :white)))    ; Draw object at new location
 
-(defn- draw-objs
-  "Draws all 'objects' in objs"
-  [c objs]
-  (doall (map (partial draw-obj c) objs)))
-
 (defn- draw-frame
-  "Draws one frame of the simulation and then moves it forward"
+  "Draws one frame of the simulation and then steps it forward"
   [c w _ _]
-  (let [{width :width, height :height, objs :objs, :as state} (c2d/get-state w)]
+  (let [{objs :objs :as state} (c2d/get-state w)]
     ; If the window has been closed, or a key pressed, close the window and quit
     (if (or (not (c2d/window-active? w))
             (c2d/key-pressed? w))
       (c2d/close-window w)
-      ; Display one frame of the simulation, then step it
+      ; Otherwise, display one frame of the simulation, then step it
       (do
-        (draw-objs c objs)
-        (let [objs (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
-              objs (gc/step-simul objs collisions? bounces? 0 0 width height)]
-          (c2d/set-state! w (assoc state :objs objs))))))
+        (c2d/with-canvas-> c
+          (c2d/set-color :black)
+          (c2d/rect 0 0 (c2d/width c) (c2d/height c)))
+        (doall (map (partial draw-obj c) objs))
+        (c2d/set-state! w (assoc state :objs (gc/step-simul objs collisions? bounces? 0 0 (c2d/width c) (c2d/height c)))))))
   nil)
 
 (defn simulate
@@ -57,7 +51,5 @@
   (c2d/show-window {:canvas      (c2d/canvas width height)
                     :window-name window-name
                     :background  :black
-                    :state       {:width   width
-                                  :height  height
-                                  :objs    objs}
+                    :state       {:objs    objs}
                     :draw-fn     draw-frame}))
