@@ -6,6 +6,7 @@
 ; letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 ;
 
+(require '[clojure2d.core])
 (require '[gravity.core :as gc] :reload-all)
 (require '[gravity.gui  :as gg] :reload-all)
 

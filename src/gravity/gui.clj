@@ -22,9 +22,9 @@
 (defn- draw-obj
   "Draws an 'object', erasing it from its previous location (if it had one)"
   [c obj]
-  (if (and (::old-x obj) (::old-y obj))
-    (circle c (::old-x obj) (::old-y obj) (+ 2 (* 2 (:mass obj))) :black))    ; Erase object at old location (if we have old coords)
-  (circle c (:x obj) (:y obj) (* 2 (:mass obj)) (get obj :colour :white)))    ; Draw object at new location
+  (when (and (::old-x obj) (::old-y obj))
+    (circle c (::old-x obj) (::old-y obj) (+ 4 (:mass obj)) :black))    ; Erase object at old location (if we have old coords)
+  (circle c (:x obj) (:y obj) (:mass obj) (get obj :colour :white)))    ; Draw object at new location
 
 (defn- draw-objs
   "Draws all 'objects' in objs"
@@ -33,7 +33,7 @@
 
 (defn- draw-frame
   "Draws one frame of the simulation and then moves it forward"
-  [c w f loop-state]
+  [c w _ _]
   (let [{width :width, height :height, objs :objs, :as state} (c2d/get-state w)]
     ; If the window has been closed, or a key pressed, close the window and quit
     (if (or (not (c2d/window-active? w))
@@ -43,7 +43,7 @@
       (do
         (draw-objs c objs)
         (let [objs (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
-              objs (gc/step-simul objs true 0 0 width height)]
+              objs (gc/step-simul objs true true 0 0 width height)]
           (c2d/set-state! w (assoc state :objs objs))))))
   nil)
 

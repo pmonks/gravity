@@ -48,7 +48,7 @@
   [x]
   (Math/sin x))
 
-(defn mass
+(defn scaled-mass
   [o]
   (let [mass (get o :mass 1)]
     (pow-mem mass mass-factor)))
@@ -58,7 +58,7 @@
    1. magnitude of gravitational force
    2. direction of gravitational force (radians)"
   [o1 o2]
-  [(* G (/ (* (mass o1) (mass o2)) (square-distance o1 o2)))
+  [(* G (/ (* (scaled-mass o1) (scaled-mass o2)) (square-distance o1 o2)))
    (atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
@@ -77,8 +77,8 @@
    2. acceleration in vertical (Y) plane"
   [o1 o2]
   (let [gf (g-force-rect o1 o2)]
-    [(/ (first  gf) (mass o1))
-     (/ (second gf) (mass o1))]))
+    [(/ (first  gf) (scaled-mass o1))
+     (/ (second gf) (scaled-mass o1))]))
 
 (defn step-simul-pair
   "Returns the accelerations obj1 and obj2 have on each other, as a vector of 2 elements,
@@ -98,34 +98,81 @@
 
 (def sum (partial apply +))
 
+(defn avg
+  [nums]
+  (when (> (count nums) 0)
+    (/ (sum nums) (count nums))))
+
+(defn- next-locs-and-vels
+  "Calculates the next locations and velocities of the given objects."
+  [objs bounce-at-edge? min-x min-y max-x max-y]
+  (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
+        accelerations-per-obj  (group-by :obj pairwise-accelerations)
+        net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
+                                               ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
+                                     (keys accelerations-per-obj))]
+    (pmap #(let [x-vel     (get % :x-vel 0)
+                 y-vel     (get % :y-vel 0)
+                 new-x     (+ (:x %) x-vel 0)
+                 new-y     (+ (:y %) y-vel 0)
+                 new-x-vel (max (* -1 speed-limit) (min speed-limit (+ x-vel (::x-accel %))))
+                 new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))]
+             (assoc % :x     new-x
+                      :y     new-y
+                      :x-vel (* new-x-vel
+                                (if (and bounce-at-edge?
+                                         (or (and (< new-x min-x) (neg? new-x-vel))
+                                             (and (> new-x max-x) (pos? new-x-vel))))
+                                  -1
+                                  1))
+                      :y-vel (* new-y-vel
+                                (if (and bounce-at-edge?
+                                         (or (and (< new-y min-y) (neg? new-y-vel))
+                                             (and (> new-y max-y) (pos? new-y-vel))))
+                                  -1
+                                  1))))
+          net-accelerations)))
+
+(defn- collided?
+  "Have the two objects collided?"
+  [o1 o2]
+  (< (square-distance o1 o2) (max 20 (/ (sq (+ (:mass o1) (:mass o2))) 4))))   ; Given that we render mass as size, this gives a reasonable visual approximation
+
+(defn- find-next-collision-group
+  [objs]
+  (let [f (first objs)
+        r (rest objs)]
+    (into [f] (filter (partial collided? f) r))))
+
+(defn- merge-objects
+  "Merges the given objects, by adding their masses, weighted-averaging their location and velocity, and retaining the colour of the most massive object."
+  [objs]
+  (let [highest-mass (apply max (map :mass objs))
+        primary      (first (filter #(= highest-mass (:mass %)) objs))
+        total-mass   (sum (map :mass objs))]
+    (assoc primary
+           :mass   total-mass
+           :x      (/ (sum (map #(* (:x %) (:mass %)) objs)) total-mass)
+           :y      (/ (sum (map #(* (:y %) (:mass %)) objs)) total-mass)
+           :x-vel  (/ (sum (map #(* (:x-vel %) (:mass %)) objs)) total-mass)
+           :y-vel  (/ (sum (map #(* (:y-vel %) (:mass %)) objs)) total-mass))))
+
+(defn- merge-collided-objects
+  [objs]
+  (loop [remaining-objs objs
+         groups         []]
+    (if (seq remaining-objs)
+      (let [new-group (find-next-collision-group remaining-objs)]
+        (recur (remove (set new-group) remaining-objs)
+               (conj groups new-group)))
+      (pmap merge-objects groups))))
+
 (defn step-simul
   "Produces a new set of objects, based on the gravitational force the input set of objects apply on each other.
    Note: this is not a physically accurate algorithm; it's simply fun to play with."
-  ([objs] (step-simul objs false nil nil nil nil))
-  ([objs bounce-at-edge? min-x min-y max-x max-y]
-   (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
-         accelerations-per-obj  (group-by :obj pairwise-accelerations)
-         net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
-                                                ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
-                                      (keys accelerations-per-obj))]
-     (pmap #(let [x-vel     (get % :x-vel 0)
-                  y-vel     (get % :y-vel 0)
-                  new-x     (+ (:x %) x-vel 0)
-                  new-y     (+ (:y %) y-vel 0)
-                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ x-vel (::x-accel %))))
-                  new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))]
-              (assoc % :x     new-x
-                       :y     new-y
-                       :x-vel (* new-x-vel
-                                 (if (and bounce-at-edge?
-                                          (or (and (< new-x min-x) (neg? new-x-vel))
-                                              (and (> new-x max-x) (pos? new-x-vel))))
-                                   -1
-                                   1))
-                       :y-vel (* new-y-vel
-                                 (if (and bounce-at-edge?
-                                          (or (and (< new-y min-y) (neg? new-y-vel))
-                                              (and (> new-y max-y) (pos? new-y-vel))))
-                                   -1
-                                   1))))
-           net-accelerations))))
+  ([objs] (step-simul objs false false nil nil nil nil))
+  ([objs merge-collided-objects? bounce-at-edge? min-x min-y max-x max-y]
+     (let [new-objs (next-locs-and-vels objs bounce-at-edge? min-x min-y max-x max-y)]
+       (if merge-collided-objects?
+         (merge-collided-objects new-objs)
+         new-objs))))
