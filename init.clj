@@ -25,20 +25,21 @@
 
 (defn gen-random-objs
   "Generates between mini and maxi random objects."
-  [mini maxi]
-  (let [border                  (/ (min width height) 6)
-        min-starting-mass       1
-        max-starting-mass       10
-        max-starting-vel        gc/speed-limit
-        double-max-starting-vel (* max-starting-vel 2)]
-    (for [i (range (rand-int-in-range mini maxi))]
-      {
-       :colour (nth colours (mod i (count colours)))
-       :mass   (rand-int-in-range min-starting-mass max-starting-mass)
-       :x      (rand-int-in-range border (- width  border))
-       :y      (rand-int-in-range border (- height border))
-       :x-vel  (- (rand double-max-starting-vel) max-starting-vel)
-       :y-vel  (- (rand double-max-starting-vel) max-starting-vel)})))
+  ([mini maxi] (gen-random-objs mini maxi width height))
+  ([ mini maxi width height]
+   (let [border                  (/ (min width height) 6)
+         min-starting-mass       1
+         max-starting-mass       10
+         max-starting-vel        gc/speed-limit
+         double-max-starting-vel (* max-starting-vel 2)]
+     (for [i (range (rand-int-in-range mini maxi))]
+       {
+        :colour (nth colours (mod i (count colours)))
+        :mass   (rand-int-in-range min-starting-mass max-starting-mass)
+        :x      (rand-int-in-range border (- width  border))
+        :y      (rand-int-in-range border (- height border))
+        :x-vel  (- (rand double-max-starting-vel) max-starting-vel)
+        :y-vel  (- (rand double-max-starting-vel) max-starting-vel)}))))
 
 (println "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
 (flush)
@@ -48,6 +49,10 @@
 
 (println "\nℹ️  To run another simulations of between X and Y random objects, run:\n\n    (gg/simulate width height (gen-random-objs X Y))\n")
 (flush)
+
+; To regenerate the gif
+;(gg/simulate 800 600 (gen-random-objs 30 30 800 600))
+
 
 ; Co-orbiters
 (comment

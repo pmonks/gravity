@@ -12,6 +12,9 @@
 
 (def window-name "Gravity Simulator")
 
+(def collisions? true)
+(def bounces?    true)    ; Without this, objects tend to drift off
+
 (defn- circle
   "Draws a solid, filled circle at location [x y], of radius r, and in colour colour."
   [c x y r colour]
@@ -43,7 +46,7 @@
       (do
         (draw-objs c objs)
         (let [objs (map #(assoc % ::old-x (:x %) ::old-y (:y %)) objs)  ; Save previous locations (for erasing)
-              objs (gc/step-simul objs true true 0 0 width height)]
+              objs (gc/step-simul objs collisions? bounces? 0 0 width height)]
           (c2d/set-state! w (assoc state :objs objs))))))
   nil)
 
