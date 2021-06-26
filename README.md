@@ -6,7 +6,7 @@ in order to produce some pretty (though unrealistic) animations:
 
 ![Demo](demo.gif?raw=true "Demo")
 
-Note: actual animation is smoother than what's shown in this screenshot.
+Note: actual animation is smoother than what's shown in this screencap.
 
 ## Trying it Out
 Clone the repo, then run:
@@ -46,11 +46,12 @@ sequence with all of the objects' positions and velocities updated.
 The remaining, optional, parameters allow the caller to specify that the objects "bounce" at the edge of a given bounding
 box.  These parameters are:
 
-  2. `bounce-at-edge?` - boolean indicating whether edge bouncing is enabled or not
-  3. `min-x` - the minimum value of the horizontal dimension of the bounding box
-  4. `min-y` - the minimum value of the vertical dimension of the bounding box
-  5. `max-x` - the maximum value of the horizontal dimension of the bounding box
-  6. `max-y` - the maximum value of the vertical dimension of the bounding box
+  2. `merge-collided-objects?` - boolean indicating whether to merge objects that have collided or not
+  3. `bounce-at-edge?` - boolean indicating whether edge bouncing is enabled or not
+  4. `min-x` - the minimum value of the horizontal dimension of the bounding box
+  5. `min-y` - the minimum value of the vertical dimension of the bounding box
+  6. `max-x` - the maximum value of the horizontal dimension of the bounding box
+  7. `max-y` - the maximum value of the vertical dimension of the bounding box
 
 ### gravity.gui
 
@@ -71,13 +72,19 @@ tested.  YMMV!
 ### init.clj
 
 The `init.clj` script includes one function that might come in handy: `gen-random-objs`.  As the name suggests, this
-creates a random number of randomly located objects, with random velocities.  It takes two parameters:
+creates a random number of randomly located objects, with random velocities.  It takes two mandatory parameters:
 
   1. `mini` - the minimum number of objects to create (inclusive)
   2. `maxi` - the maximum number of objects to create (inclusive)
 
-Note that currently this function uses global vars that are defined earlier in the `init.clj` script, so it won't
-function unless that script has been used to initialise your REPL (yes this is lame, yes it should be fixed...).
+And two optional parameters:
+
+  3. `width` - the maximum x coordinate to generate (defaults to the current screen width)
+  4. `height` - the maximum y coordinate to generate (defaults to the current screen height)
+
+Note that currently this function uses global vars `width` and `height` that are defined earlier in the `init.clj`
+script, so it won't function unless that script has been used to initialise your REPL (yes this is lame, yes it should
+be fixed...).
 
 ## Contributor Information
 
