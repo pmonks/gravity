@@ -12,7 +12,7 @@ Note: actual animation is smoother than what's shown in this screencap.
 Clone the repo, then run:
 
 ```shell
-$ clj -M -i init.clj -r
+$ clj -i init.clj -r
 ```
 
 Look for the Java GUI window and bring it into focus; an initial random simulation will be running in it.  Press
