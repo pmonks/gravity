@@ -52,7 +52,7 @@
 (println "    (gg/simulate width height (gen-random-objs X Y) :trails true)\n")
 (flush)
 
-; To regenerate the gif
+; To regenerate the demo gif
 ;(gg/simulate 800 600 (gen-random-objs 30 30 800 600))
 
 
