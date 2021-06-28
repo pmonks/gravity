@@ -105,7 +105,7 @@
 (defn radius
   "The radius of the given object based on its mass, rounded down to the nearest integer."
   [o]
-  (int (max 1 (pow-mem (:mass o) 0.8))))
+  (int (max 1 (pow-mem (:mass o) 0.6))))    ; Real value for stars is ~0.8
 
 (defn- next-locs-and-vels
   "Calculates the next locations and velocities of the given objects."
