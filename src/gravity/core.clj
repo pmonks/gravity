@@ -11,7 +11,7 @@
 
 (def G                 1.5)     ; Our version of the gravitational constant
 (def min-distance      10)      ; Minimum "allowed" distance between objects (to minimise ejections)
-(def speed-limit       2.5)     ; Maximum allowed rectilinear velocity, in either dimension
+(def speed-limit       25)      ; Maximum allowed rectilinear velocity, in either dimension
 (def mass-factor       1.25)    ; Exponent for mass
 
 (defn sq
@@ -103,6 +103,11 @@
   (when (> (count nums) 0)
     (/ (sum nums) (count nums))))
 
+(defn radius
+  "The radius of the given object based on its mass, rounded down to the nearest integer."
+  [o]
+  (int (max 1 (pow-mem (:mass o) 0.8))))
+
 (defn- next-locs-and-vels
   "Calculates the next locations and velocities of the given objects."
   [objs bounce-at-edge? min-x min-y max-x max-y]
@@ -116,19 +121,20 @@
                  new-x     (+ (:x %) x-vel 0)
                  new-y     (+ (:y %) y-vel 0)
                  new-x-vel (max (* -1 speed-limit) (min speed-limit (+ x-vel (::x-accel %))))
-                 new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))]
+                 new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))
+                 radius    (radius %)]
              (assoc % :x     new-x
                       :y     new-y
                       :x-vel (* new-x-vel
                                 (if (and bounce-at-edge?
-                                         (or (and (< new-x min-x) (neg? new-x-vel))
-                                             (and (> new-x max-x) (pos? new-x-vel))))
+                                         (or (and (< (- new-x radius) min-x) (neg? new-x-vel))
+                                             (and (> (+ new-x radius) max-x) (pos? new-x-vel))))
                                   -1
                                   1))
                       :y-vel (* new-y-vel
                                 (if (and bounce-at-edge?
-                                         (or (and (< new-y min-y) (neg? new-y-vel))
-                                             (and (> new-y max-y) (pos? new-y-vel))))
+                                         (or (and (< (- new-y radius) min-y) (neg? new-y-vel))
+                                             (and (> (+ new-y radius) max-y) (pos? new-y-vel))))
                                   -1
                                   1))))
           net-accelerations)))
@@ -136,7 +142,8 @@
 (defn- collided?
   "Have the two objects collided?"
   [o1 o2]
-  (< (square-distance o1 o2) (max 20 (/ (sq (+ (:mass o1) (:mass o2))) 4))))   ; Given that we render mass as size, this gives a reasonable visual approximation
+;  (< (square-distance o1 o2) (max 20 (/ (sq (+ (:mass o1) (:mass o2))) 4))))   ; Given that we render mass as size, this gives a reasonable visual approximation
+  (< (square-distance o1 o2) (/ (sq (+ (radius o1) (radius o2))) 3)))
 
 (defn- find-next-collision-group
   [objs]

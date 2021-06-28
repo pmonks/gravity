@@ -7,7 +7,6 @@
 ;
 
 (require '[clojure2d.core])
-(require '[gravity.core :as gc] :reload-all)
 (require '[gravity.gui  :as gg] :reload-all)
 
 (defn rand-int-in-range
@@ -30,7 +29,7 @@
    (let [border                  (/ (min width height) 6)
          min-starting-mass       1
          max-starting-mass       10
-         max-starting-vel        gc/speed-limit
+         max-starting-vel        2.5
          double-max-starting-vel (* max-starting-vel 2)]
      (for [i (range (rand-int-in-range mini maxi))]
        {
@@ -45,9 +44,12 @@
 (flush)
 
 ; Run a simulation with a random number of randomly placed objects
-(gg/simulate width height (gen-random-objs 10 50))
+(gg/simulate width height (gen-random-objs 50 200))
 
-(println "\nℹ️  To run another simulations of between X and Y random objects, run:\n\n    (gg/simulate width height (gen-random-objs X Y))\n")
+(println "\nℹ️  To run another simulations of between X and Y random objects, run:\n")
+(println "    (gg/simulate width height (gen-random-objs X Y))\n")
+(println "  or, to show trails:\n")
+(println "    (gg/simulate width height (gen-random-objs X Y) :trails true)\n")
 (flush)
 
 ; To regenerate the gif

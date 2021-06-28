@@ -12,9 +12,6 @@
 
 (def window-name "Gravity Simulator")
 
-(def collisions? true)
-(def bounces?    true)    ; Without this, objects tend to drift off
-
 (defn- circle
   "Draws a solid, filled circle at location [x y], of radius r, and in colour colour."
   [c x y r colour]
@@ -25,21 +22,22 @@
 (defn- draw-obj
   "Draws an 'object'"
   [c obj]
-  (circle c (:x obj) (:y obj) (:mass obj) (get obj :colour :white)))    ; Draw object at new location
+  (circle c (:x obj) (:y obj) (gc/radius obj) (get obj :colour :white)))    ; Draw object at new location
 
 (defn- draw-frame
   "Draws one frame of the simulation and then steps it forward"
   [c w _ _]
-  (let [{objs :objs :as state} (c2d/get-state w)]
+  (let [{objs :objs collisions? :collisions bounces? :bounces trails? :trails :as state} (c2d/get-state w)]
     ; If the window has been closed, or a key pressed, close the window and quit
     (if (or (not (c2d/window-active? w))
             (c2d/key-pressed? w))
       (c2d/close-window w)
       ; Otherwise, display one frame of the simulation, then step it
       (do
-        (c2d/with-canvas-> c
-          (c2d/set-color :black)
-          (c2d/rect 0 0 (c2d/width c) (c2d/height c)))
+        (when-not trails?
+          (c2d/with-canvas-> c
+            (c2d/set-color :black)
+            (c2d/rect 0 0 (c2d/width c) (c2d/height c))))
         (doall (map (partial draw-obj c) objs))
         (c2d/set-state! w (assoc state :objs (gc/step-simul objs collisions? bounces? 0 0 (c2d/width c) (c2d/height c)))))))
   nil)
@@ -47,9 +45,13 @@
 (defn simulate
   "Opens a window of size width x height and simulates the given set of objects in it, continuing until the window is
    closed or a key is pressed.  Returns a handle to the window."
-  [width height objs]
+  [width height objs & {:keys [collisions bounces trails]
+                        :or {collisions true bounces true trails false}}]
   (c2d/show-window {:canvas      (c2d/canvas width height)
                     :window-name window-name
                     :background  :black
-                    :state       {:objs    objs}
+                    :state       {:objs       objs
+                                  :collisions collisions
+                                  :bounces    bounces
+                                  :trails     trails}
                     :draw-fn     draw-frame}))
