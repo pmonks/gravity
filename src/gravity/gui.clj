@@ -15,9 +15,10 @@
 (defn- circle
   "Draws a solid, filled circle at location [x y], of radius r, and in colour colour."
   [c x y r colour]
-  (c2d/with-canvas-> c
-    (c2d/set-color colour)
-    (c2d/ellipse x y r r)))
+  (let [diameter (* 2 r)]
+    (c2d/with-canvas-> c
+      (c2d/set-color colour)
+      (c2d/ellipse x y diameter diameter))))
 
 (defn- draw-obj
   "Draws an 'object'"
