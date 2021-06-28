@@ -9,10 +9,8 @@
 (ns gravity.core
   (:require [clojure.math.combinatorics :as comb]))
 
-(def G                 1.5)     ; Our version of the gravitational constant
-(def min-distance      10)      ; Minimum "allowed" distance between objects (to minimise ejections)
-(def speed-limit       25)      ; Maximum allowed rectilinear velocity, in either dimension
-(def mass-factor       1.25)    ; Exponent for mass
+(def G           1.5)     ; Our version of the gravitational constant
+(def mass-factor 1.25)    ; Exponent for mass, to help keep the simulation compact
 
 (defn sq
   "The square of x."
@@ -22,14 +20,15 @@
 (defn square-distance
   "The distance, squared, between o1 and o2."
   [o1 o2]
-  (max min-distance  ; Clamp the minimum distance, to reduce "ejections"
-       (+ (sq (- (:x o2) (:x o1)))
-          (sq (- (:y o2) (:y o1))))))
+  (+ (sq (- (:x o2) (:x o1)))
+     (sq (- (:y o2) (:y o1)))))
+
+(def π Math/PI)
 
 (defn rads-to-degs
   "The angle in degrees of rad (radians)."
   [rad]
-  (* rad (/ 180 Math/PI)))
+  (* rad (/ 180 π)))
 
 (defn pow
   [x y]
@@ -118,10 +117,10 @@
                                      (keys accelerations-per-obj))]
     (pmap #(let [x-vel     (get % :x-vel 0)
                  y-vel     (get % :y-vel 0)
-                 new-x     (+ (:x %) x-vel 0)
-                 new-y     (+ (:y %) y-vel 0)
-                 new-x-vel (max (* -1 speed-limit) (min speed-limit (+ x-vel (::x-accel %))))
-                 new-y-vel (max (* -1 speed-limit) (min speed-limit (+ y-vel (::y-accel %))))
+                 new-x     (+ (:x %) x-vel)
+                 new-y     (+ (:y %) y-vel)
+                 new-x-vel (+ x-vel (::x-accel %))
+                 new-y-vel (+ y-vel (::y-accel %))
                  radius    (radius %)]
              (assoc % :x     new-x
                       :y     new-y
@@ -142,10 +141,10 @@
 (defn- collided?
   "Have the two objects collided?"
   [o1 o2]
-;  (< (square-distance o1 o2) (max 20 (/ (sq (+ (:mass o1) (:mass o2))) 4))))   ; Given that we render mass as size, this gives a reasonable visual approximation
-  (< (square-distance o1 o2) (/ (sq (+ (radius o1) (radius o2))) 3)))
+  (< (square-distance o1 o2) (sq (+ (radius o1) (radius o2)))))
 
 (defn- find-next-collision-group
+  "Returns all objects that have collided with (first objs), including (first objs) itself."
   [objs]
   (let [f (first objs)
         r (rest objs)]
@@ -165,6 +164,7 @@
            :y-vel  (/ (sum (map #(* (:y-vel %) (:mass %)) objs)) total-mass))))
 
 (defn- merge-collided-objects
+  "Finds and merges all objects that have collided."
   [objs]
   (loop [remaining-objs objs
          groups         []]
