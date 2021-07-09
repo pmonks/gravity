@@ -28,20 +28,23 @@
 (defn- draw-frame
   "Draws one frame of the simulation and then steps it forward"
   [c w _ _]
-  (let [{objs :objs collisions? :collisions bounces? :bounces trails? :trails :as state} (c2d/get-state w)]
-    ; If the window has been closed, or a key pressed, close the window and quit
-    (if (or (not (c2d/window-active? w))
-            (c2d/key-pressed? w))
-      (c2d/close-window w)
-      ; Otherwise, display one frame of the simulation, then step it
-      (do
-        (when-not trails?
-          (c2d/with-canvas-> c
-            (c2d/set-color :black)
-            (c2d/rect 0 0 (c2d/width c) (c2d/height c))))
-        (doall (map (partial draw-obj c) objs))
-        (c2d/set-state! w (assoc state :objs (gc/step-simul objs collisions? bounces? 0 0 (c2d/width c) (c2d/height c)))))))
-  nil)
+  (try
+    (let [{objs :objs collisions? :collisions bounces? :bounces trails? :trails :as state} (c2d/get-state w)]
+      ; If the window has been closed, or a key pressed, close the window and quit
+      (if (or (not (c2d/window-active? w))
+              (c2d/key-pressed? w))
+        (c2d/close-window w)
+        ; Otherwise, display one frame of the simulation, then step it
+        (do
+          (when-not trails?
+            (c2d/with-canvas-> c
+              (c2d/set-color :black)
+              (c2d/rect 0 0 (c2d/width c) (c2d/height c))))
+          (doall (map (partial draw-obj c) objs))
+          (c2d/set-state! w (assoc state :objs (gc/step-simul objs collisions? bounces? 0 0 (c2d/width c) (c2d/height c))))))
+      nil)
+    (catch Exception e
+      (println e))))
 
 (defn simulate
   "Opens a window of size width x height and simulates the given set of objects in it, continuing until the window is
