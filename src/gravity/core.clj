@@ -112,7 +112,10 @@
   "Calculates the next locations and velocities of the given objects."
   [objs bounce-at-edge? min-x min-y max-x max-y]
   (case (count objs)
+    ; No objects?  Do nothing.
     0 []
+
+    ; 1 object? Just keep it moving with its current velocity
     1 (let [obj    (first objs)
             new-x  (+ (:x obj) (:x-vel obj))
             new-y  (+ (:y obj) (:y-vel obj))
@@ -134,6 +137,8 @@
                             1))
                 :x        new-x
                 :y        new-y)])
+
+    ; More than 1 object?  Calculate their mutual forces on one other, update their velocities accordingly, then update their positions.
     (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
           accelerations-per-obj  (group-by :obj pairwise-accelerations)
           net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
