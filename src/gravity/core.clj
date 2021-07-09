@@ -111,33 +111,56 @@
 (defn- next-locs-and-vels
   "Calculates the next locations and velocities of the given objects."
   [objs bounce-at-edge? min-x min-y max-x max-y]
-  (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
-        accelerations-per-obj  (group-by :obj pairwise-accelerations)
-        net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
-                                               ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
-                                     (keys accelerations-per-obj))]
-    (pmap #(let [x-vel     (get % :x-vel 0)
-                 y-vel     (get % :y-vel 0)
-                 new-x     (+ (:x %) x-vel)
-                 new-y     (+ (:y %) y-vel)
-                 new-x-vel (+ x-vel (::x-accel %))
-                 new-y-vel (+ y-vel (::y-accel %))
-                 radius    (radius %)]
-             (assoc % :x     new-x
-                      :y     new-y
-                      :x-vel (* new-x-vel
-                                (if (and bounce-at-edge?
-                                         (or (and (< (- new-x radius) min-x) (neg? new-x-vel))
-                                             (and (> (+ new-x radius) max-x) (pos? new-x-vel))))
-                                  -1
-                                  1))
-                      :y-vel (* new-y-vel
-                                (if (and bounce-at-edge?
-                                         (or (and (< (- new-y radius) min-y) (neg? new-y-vel))
-                                             (and (> (+ new-y radius) max-y) (pos? new-y-vel))))
-                                  -1
-                                  1))))
-          net-accelerations)))
+  (case (count objs)
+    0 []
+    1 (let [obj    (first objs)
+            new-x  (+ (:x obj) (:x-vel obj))
+            new-y  (+ (:y obj) (:y-vel obj))
+            radius (radius obj)]
+        [(assoc obj
+                ::x-accel 0
+                ::y-accel 0
+                :x-vel (* (:x-vel obj)
+                          (if (and bounce-at-edge?
+                                   (or (and (< (- new-x radius) min-x) (neg? (:x-vel obj)))
+                                       (and (> (+ new-x radius) max-x) (pos? (:x-vel obj)))))
+                            -1
+                            1))
+                :y-vel (* (:y-vel obj)
+                          (if (and bounce-at-edge?
+                                   (or (and (< (- new-y radius) min-y) (neg? (:y-vel obj)))
+                                       (and (> (+ new-y radius) max-y) (pos? (:y-vel obj)))))
+                            -1
+                            1))
+                :x        new-x
+                :y        new-y)])
+    (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
+          accelerations-per-obj  (group-by :obj pairwise-accelerations)
+          net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
+                                                 ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
+                                       (keys accelerations-per-obj))]
+      (pmap #(let [x-vel     (get % :x-vel 0)
+                   y-vel     (get % :y-vel 0)
+                   new-x     (+ (:x %) x-vel)
+                   new-y     (+ (:y %) y-vel)
+                   new-x-vel (+ x-vel (::x-accel %))
+                   new-y-vel (+ y-vel (::y-accel %))
+                   radius    (radius %)]
+               (assoc % :x     new-x
+                        :y     new-y
+                        :x-vel (* new-x-vel
+                                  (if (and bounce-at-edge?
+                                           (or (and (< (- new-x radius) min-x) (neg? new-x-vel))
+                                               (and (> (+ new-x radius) max-x) (pos? new-x-vel))))
+                                    -1
+                                    1))
+                        :y-vel (* new-y-vel
+                                  (if (and bounce-at-edge?
+                                           (or (and (< (- new-y radius) min-y) (neg? new-y-vel))
+                                               (and (> (+ new-y radius) max-y) (pos? new-y-vel))))
+                                    -1
+                                    1))))
+            net-accelerations))))
 
 (defn- collided?
   "Have the two objects collided?"
