@@ -64,10 +64,9 @@ which takes these parameters:
   3. `objs` - the sequence of objects to use in the simulation
 
 The window runs independently of the calling thread, and terminates when the window is closed via OS mechanisms, or
-when any key is pressed when the window has focus.
+when the 'q' key is pressed while the window has focus.
 
-Note that in theory this means you can have multiple simulation windows open concurrently, though this hasn't been
-tested.  YMMV!
+Note that this also means you can have any number of independent simulation windows open concurrently.
 
 ### init.clj
 
@@ -77,10 +76,11 @@ creates a random number of randomly located objects, with random velocities.  It
   1. `mini` - the minimum number of objects to create (inclusive)
   2. `maxi` - the maximum number of objects to create (inclusive)
 
-And two optional parameters:
+And some optional parameters:
 
   3. `width` - the maximum x coordinate to generate (defaults to the current screen width)
   4. `height` - the maximum y coordinate to generate (defaults to the current screen height)
+  5. `:trails true/false` - a flag that indicates whether the visualisation should have object trails or not (defaults to `false`)
 
 Note that currently this function uses global vars `width` and `height` that are defined earlier in the `init.clj`
 script, so it won't function unless that script has been used to initialise your REPL (yes this is lame, yes it should
