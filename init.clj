@@ -1,5 +1,5 @@
 ;
-; Copyright © 2019 Peter Monks Some Rights Reserved
+; Copyright © 2019 Peter Monks
 ;
 ; This file is part of pmonks/gravity.
 ;

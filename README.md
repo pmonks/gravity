@@ -94,7 +94,7 @@ be fixed...).
 
 ## License
 
-Copyright © 2019 Peter Monks Some Rights Reserved
+Copyright © 2019 Peter Monks
 
 This work is licensed under the [GNU Affero General Public License v3.0 or later](http://www.gnu.org/licenses/agpl-3.0.html).
 
