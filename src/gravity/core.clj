@@ -1,9 +1,20 @@
 ;
 ; Copyright © 2019 Peter Monks Some Rights Reserved
 ;
-; This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
-; To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-sa/4.0/ or send a
-; letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+; This file is part of pmonks/gravity.
+;
+; pmonks/gravity is free software: you can redistribute it and/or modify
+; it under the terms of the GNU Affero General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; pmonks/gravity is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU Affero General Public License for more details.
+;
+; You should have received a copy of the GNU Affero General Public License
+; along with pmonks/gravity.  If not, see <https://www.gnu.org/licenses/>.
 ;
 
 (ns gravity.core
