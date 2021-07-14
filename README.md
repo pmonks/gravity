@@ -53,6 +53,7 @@ box.  These parameters are:
   6. `max-x` - the maximum value of the horizontal dimension of the bounding box
   7. `max-y` - the maximum value of the vertical dimension of the bounding box
 
+
 ### gravity.gui
 
 This ns contains the logic related to displaying a simulation in a GUI window, currently via the
@@ -62,29 +63,22 @@ which takes these parameters:
   1. `width` - the width of the window, in pixels
   2. `height` - the height of the window, in pixels
   3. `objs` - the sequence of objects to use in the simulation
+  4. `:trails true/false` - an optional flag that indicates whether the visualisation should have object trails or not (defaults to `false`)
 
 The window runs independently of the calling thread, and terminates when the window is closed via OS mechanisms, or
 when the 'q' key is pressed while the window has focus.
 
 Note that this also means you can have any number of independent simulation windows open concurrently.
 
-### init.clj
+### gravity.util
 
-The `init.clj` script includes one function that might come in handy: `gen-random-objs`.  As the name suggests, this
-creates a random number of randomly located objects, with random velocities.  It takes two mandatory parameters:
+Includes a `gen-random-objs` fn that will create a random number of randomly located objects, with random velocities.
+It takes four mandatory parameters:
 
   1. `mini` - the minimum number of objects to create (inclusive)
   2. `maxi` - the maximum number of objects to create (inclusive)
-
-And some optional parameters:
-
-  3. `width` - the maximum x coordinate to generate (defaults to the current screen width)
-  4. `height` - the maximum y coordinate to generate (defaults to the current screen height)
-  5. `:trails true/false` - a flag that indicates whether the visualisation should have object trails or not (defaults to `false`)
-
-Note that currently this function uses global vars `width` and `height` that are defined earlier in the `init.clj`
-script, so it won't function unless that script has been used to initialise your REPL (yes this is lame, yes it should
-be fixed...).
+  3. `width` - the maximum x coordinate to generate
+  4. `height` - the maximum y coordinate to generate
 
 ## Contributor Information
 
