@@ -20,7 +20,7 @@
 {:deps {org.clojure/clojure            {:mvn/version "1.10.3"}
         clojure2d/clojure2d            {:mvn/version "1.4.3"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
-        ch.qos.logback/logback-classic {:mvn/version "1.2.3"}}
+        ch.qos.logback/logback-classic {:mvn/version "1.2.4"}}
  :aliases {
     ; clj -M:check
     :check    {:extra-deps {athos/clj-check {:git/url "https://github.com/athos/clj-check.git"
@@ -35,6 +35,6 @@
        :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}
     ; clj -M:eastwood
     :eastwood
-      {:extra-deps {jonase/eastwood {:mvn/version "0.9.2"}}
+      {:extra-deps {jonase/eastwood {:mvn/version "0.9.3"}}
        :main-opts  ["-m" "eastwood.lint" {:source-paths ["src" "resources"]}]}
     }}
