@@ -1,3 +1,4 @@
+[![Build](https://github.com/pmonks/gravity/workflows/build/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Abuild) [![Lint](https://github.com/pmonks/gravity/workflows/lint/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Alint) [![Dependencies](https://github.com/pmonks/gravity/workflows/dependencies/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Adependencies)
 
 # gravity
 

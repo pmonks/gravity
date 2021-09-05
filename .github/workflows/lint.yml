@@ -1,0 +1,27 @@
+name: lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Java LTS
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+
+      - name: Install Clojure CLI
+        uses: DeLaGuardo/setup-clojure@3.5
+        with:
+          tools-deps: latest
+
+      - name: Lint (kondo)
+        run: clojure -Srepro -M:kondo
+
+      - name: Lint (eastwood)
+        run: clojure -Srepro -M:eastwood
