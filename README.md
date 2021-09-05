@@ -22,7 +22,7 @@ any key to close the window.
 To run another random simulation, with between 3 and 25 randomly located objects:
 
 ```clojure
-(gg/simulate width height (gen-random-objs 3 25))
+(gg/simulate width height (gu/gen-random-objs 50 200 width height))
 ```
 
 ## Code Structure
