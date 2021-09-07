@@ -1,4 +1,5 @@
-[![Build](https://github.com/pmonks/gravity/workflows/build/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Abuild) [![Lint](https://github.com/pmonks/gravity/workflows/lint/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Alint) [![Dependencies](https://github.com/pmonks/gravity/workflows/dependencies/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Adependencies)
+[![Build](https://github.com/pmonks/gravity/workflows/build/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Abuild) [![Lint](https://github.com/pmonks/gravity/workflows/lint/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Alint) [![Dependencies](https://github.com/pmonks/gravity/workflows/dependencies/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Adependencies) [![Open Issues](https://img.shields.io/github/issues/pmonks/gravity.svg)](https://github.com/pmonks/gravity/issues) [![License](https://img.shields.io/github/license/pmonks/gravity.svg)](https://github.com/pmonks/gravity/blob/main/COPYING)
+
 
 # gravity
 
