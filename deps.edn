@@ -20,7 +20,7 @@
 {:deps {org.clojure/clojure            {:mvn/version "1.10.3"}
         clojure2d/clojure2d            {:mvn/version "1.4.3"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
-        ch.qos.logback/logback-classic {:mvn/version "1.2.5"}}
+        ch.qos.logback/logback-classic {:mvn/version "1.2.6"}}
  :aliases {
     ; clj -M:check
     :check    {:extra-deps {athos/clj-check {:git/url "https://github.com/athos/clj-check.git"
