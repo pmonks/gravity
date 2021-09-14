@@ -20,7 +20,7 @@ $ clj -i init.clj -r
 Look for the Java GUI window and bring it into focus; an initial random simulation will be running in it.  Press
 any key to close the window.
 
-To run another random simulation, with between 3 and 25 randomly located objects:
+To run another random simulation, with between 50 and 200 randomly located objects:
 
 ```clojure
 (gg/simulate width height (gu/gen-random-objs 50 200 width height))
