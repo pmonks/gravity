@@ -31,7 +31,7 @@
                :main-opts ["-m" "antq.core"]}
     ; clj -M:kondo
     :kondo
-      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.09.15"}}
+      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.09.25"}}
        :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}
     ; clj -M:eastwood
     :eastwood
