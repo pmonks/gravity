@@ -23,8 +23,7 @@
         ch.qos.logback/logback-classic {:mvn/version "1.2.6"}}
  :aliases {
     ; clj -M:check
-    :check    {:extra-deps {athos/clj-check {:git/url "https://github.com/athos/clj-check.git"
-                                             :sha     "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
+    :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
     :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "1.2.0"}}
