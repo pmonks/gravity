@@ -17,7 +17,8 @@
 ; along with pmonks/gravity.  If not, see <https://www.gnu.org/licenses/>.
 ;
 
-{:deps {org.clojure/clojure            {:mvn/version "1.10.3"}
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure            {:mvn/version "1.10.3"}
         clojure2d/clojure2d            {:mvn/version "1.4.3"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
         ch.qos.logback/logback-classic {:mvn/version "1.2.7"}}
@@ -31,7 +32,7 @@
     ; clj -M:kondo
     :kondo
       {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.10.19"}}
-       :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}
+       :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "resources"]}
     ; clj -M:eastwood
     :eastwood
       {:extra-deps {jonase/eastwood {:mvn/version "0.9.9"}}
