@@ -1,4 +1,4 @@
-name: lint
+name: CI
 
 on: [push, pull_request]
 
@@ -11,7 +11,7 @@ jobs:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@master
 
-  lint:
+  CI:
     needs: skip_check
     if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
@@ -34,8 +34,5 @@ jobs:
             ~/.cpcache
           key: ${{ runner.os }}-${{ hashFiles('**/deps.edn') }}
 
-      - name: Lint (kondo)
-        run: clojure -Srepro -M:kondo
-
-      - name: Lint (eastwood)
-        run: clojure -Srepro -M:eastwood
+      - name: Continuous integration
+        run: clojure -Srepro -J-Dclojure.main.report=stderr -T:build ci
