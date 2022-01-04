@@ -34,5 +34,14 @@ jobs:
             ~/.cpcache
           key: ${{ runner.os }}-${{ hashFiles('**/deps.edn') }}
 
-      - name: Continuous integration
-        run: clojure -Srepro -J-Dclojure.main.report=stderr -T:build ci
+      - name: Check code
+        run: clojure -Srepro -J-Dclojure.main.report=stderr -M:check
+
+      - name: Check for outdated dependencies
+        run: clojure -Srepro -J-Dclojure.main.report=stderr -M:outdated
+
+      - name: Lint (clj-kondo)
+        run: clojure -Srepro -J-Dclojure.main.report=stderr -M:kondo
+
+      - name: Lint (eastwood)
+        run: clojure -Srepro -J-Dclojure.main.report=stderr -M:eastwood
