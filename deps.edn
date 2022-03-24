@@ -18,7 +18,7 @@
 ;
 
 {:paths ["src" "resources"]
- :deps {org.clojure/clojure            {:mvn/version "1.10.3"}
+ :deps {org.clojure/clojure            {:mvn/version "1.11.0"}
         clojure2d/clojure2d            {:mvn/version "1.4.3"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
         ch.qos.logback/logback-classic {:mvn/version "1.2.11"}}
