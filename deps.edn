@@ -21,13 +21,13 @@
  :deps {org.clojure/clojure            {:mvn/version "1.11.1"}
         clojure2d/clojure2d            {:mvn/version "1.4.4"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
-        ch.qos.logback/logback-classic {:mvn/version "1.4.4"}}
+        ch.qos.logback/logback-classic {:mvn/version "1.4.5"}}
  :aliases {
     ; clj -M:check
     :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
-    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.1.946"}}
+    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.2.962"}}
                :main-opts ["-m" "antq.core"]}
     ; clj -M:kondo
     :kondo
