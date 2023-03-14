@@ -23,6 +23,9 @@
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
         ch.qos.logback/logback-classic {:mvn/version "1.4.5"}}
  :aliases {
+    ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
+    :flames {:extra-deps {flames/flames {:mvn/version "0.5.0"}}}
+
     ; clj -M:check
     :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
