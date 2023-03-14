@@ -73,9 +73,9 @@
    1. magnitude of gravitational force
    2. direction of gravitational force (radians)"
   [o1 o2]
-  [(* G (/ (* ^double (scaled-mass o1) ^double (scaled-mass o2))
-           (max ^double (square-distance o1 o2) 0.00000001)))   ; Ensure we don't divide by zero
-   (atan2 (- ^double (:y o2) ^double (:y o1)) (- ^double (:x o2) ^double (:x o1)))])
+  [(* G (/ (* (scaled-mass o1) (scaled-mass o2))
+           (max (square-distance o1 o2) 0.00000001)))   ; Ensure we don't divide by zero
+   (atan2 (- (:y o2) (:y o1)) (- (:x o2) (:x o1)))])
 
 (defn g-force-rect
   "Returns gravitational force between two 'objects' as a rectilinear vector of 2 elements:
