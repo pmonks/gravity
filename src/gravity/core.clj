@@ -20,48 +20,49 @@
 (ns gravity.core
   (:require [clojure.math.combinatorics :as comb]))
 
-(def G           1.5)     ; Our version of the gravitational constant
-(def mass-factor 1.25)    ; Exponent for mass, to help keep the simulation compact
+(def G                       1.5)    ; Our dodgy version of the gravitational constant
+(def mass-factor             1.25)   ; Exponent for mass, to help keep the simulation compact
+(def mass-to-radius-exponent 0.6)    ; Exponent of mass to radius. Real value for stars is ~0.8.
 
-(defn sq
+(defmacro sq
   "The square of x."
   [x]
-  (* x x))
+  `(let [val# ~x]
+     (* val# val#)))
 
-(defn square-distance
+(defmacro square-distance
   "The distance, squared, between o1 and o2."
   [o1 o2]
-  (+ (sq (- (:x o2) (:x o1)))
-     (sq (- (:y o2) (:y o1)))))
+  `(+ (sq (- (:x ~o2) (:x ~o1)))
+      (sq (- (:y ~o2) (:y ~o1)))))
 
-(def π Math/PI)
+(def π java.lang.Math/PI)
 
-(defn rads-to-degs
+(defmacro rads-to-degs
   "The angle in degrees of rad (radians)."
   [rad]
-  (* rad (/ 180 π)))
+  `(* ~rad (/ 180 π)))
 
-(defn pow
+(defmacro pow
   [x y]
-  (Math/pow x y))
-(def pow-mem (memoize pow))
+  `(java.lang.Math/pow ~x ~y))
 
-(defn atan2
+(defmacro atan2
   [x y]
-  (Math/atan2 x y))
+  `(java.lang.Math/atan2 ~x ~y))
 
-(defn cos
+(defmacro cos
   [x]
-  (Math/cos x))
+  `(java.lang.Math/cos ~x))
 
-(defn sin
+(defmacro sin
   [x]
-  (Math/sin x))
+  `(java.lang.Math/sin ~x))
 
-(defn scaled-mass
+(defmacro scaled-mass
   [o]
-  (let [mass (get o :mass 1)]
-    (pow-mem mass mass-factor)))
+  `(let [mass# (get ~o :mass 1)]
+     (pow mass# mass-factor)))
 
 (defn g-force-polar
   "Returns gravitational force between two 'objects' as a polar vector of 2 elements:
@@ -107,17 +108,19 @@
        (apply concat)
        doall))
 
-(def sum (partial apply +))
+(def sum (partial reduce +))
 
-(defn avg
-  [nums]
-  (when (> (count nums) 0)
-    (/ (sum nums) (count nums))))
+; Note: unused
+;(defmacro avg
+;  "Calculates the average of the given nums."
+;  [nums]
+;  `(when (> (count ~nums) 0)
+;     (/ (sum ~nums) (count ~nums))))
 
-(defn radius
+(defmacro radius
   "The radius of the given object based on its mass, rounded down to the nearest integer."
   [o]
-  (int (max 1 (pow-mem (:mass o) 0.6))))    ; Real value for stars is ~0.8
+  `(int (max 1 (pow (:mass ~o) mass-to-radius-exponent))))
 
 (defn- next-locs-and-vels
   "Calculates the next locations and velocities of the given objects."
