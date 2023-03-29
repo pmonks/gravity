@@ -20,8 +20,8 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure            {:mvn/version "1.11.1"}
         clojure2d/clojure2d            {:mvn/version "1.4.4"}
-        org.clojure/math.combinatorics {:mvn/version "0.1.6"}
-        ch.qos.logback/logback-classic {:mvn/version "1.4.5"}}
+        org.clojure/math.combinatorics {:mvn/version "0.2.0"}
+        ch.qos.logback/logback-classic {:mvn/version "1.4.6"}}
  :aliases {
     ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
     :flames {:extra-deps {flames/flames {:mvn/version "0.5.0"}}}
@@ -30,11 +30,11 @@
     :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
-    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.2.1011"}}
+    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.2.1017"}}
                :main-opts ["-m" "antq.core"]}
     ; clj -M:kondo
     :kondo
-      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2023.02.17"}}
+      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2023.03.17"}}
        :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "resources"]}
     ; clj -M:eastwood
     :eastwood
