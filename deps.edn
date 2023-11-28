@@ -21,7 +21,7 @@
  :deps {org.clojure/clojure            {:mvn/version "1.11.1"}
         clojure2d/clojure2d            {:mvn/version "1.4.5"}
         org.clojure/math.combinatorics {:mvn/version "0.2.0"}
-        ch.qos.logback/logback-classic {:mvn/version "1.4.11"}}
+        ch.qos.logback/logback-classic {:mvn/version "1.4.13"}}
  :aliases {
     ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
     :flames {:extra-deps {flames/flames {:mvn/version "0.5.0"}}}
@@ -38,6 +38,6 @@
        :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "resources"]}
     ; clj -M:eastwood
     :eastwood
-      {:extra-deps {jonase/eastwood {:mvn/version "1.4.0"}}
+      {:extra-deps {jonase/eastwood {:mvn/version "1.4.2"}}
        :main-opts  ["-m" "eastwood.lint" {:source-paths ["src" "resources"]}]}
     }}
