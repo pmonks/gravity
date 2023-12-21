@@ -18,7 +18,9 @@
 ;
 
 (ns gravity.core
-  (:require [clojure.math.combinatorics :as comb]))
+  (:require [clojure.math.combinatorics :as comb]
+            [embroidery.api             :as e]
+            [gravity.util               :as u]))
 
 ; Note: because we store numbers in maps, we cannot have fully unboxed numbers (the JVM doesn't (yet) support primitives in maps)
 ;(set! *warn-on-reflection* true)
@@ -106,7 +108,7 @@
 (defn pmapcat
   [f batches]
   (->> batches
-       (pmap f)
+       (e/pmap* f)
        (apply concat)
        doall))
 
@@ -157,31 +159,31 @@
     ; More than 1 object?  Calculate their mutual forces on one other, update their velocities accordingly, then update their positions.
     (let [pairwise-accelerations (pmapcat step-simul-pair (comb/combinations objs 2))
           accelerations-per-obj  (group-by :obj pairwise-accelerations)
-          net-accelerations      (pmap #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
+          net-accelerations      (e/pmap* #(assoc % ::x-accel (sum (map (fn [x] (first  (::accel x))) (get accelerations-per-obj %)))
                                                  ::y-accel (sum (map (fn [x] (second (::accel x))) (get accelerations-per-obj %))))
-                                       (keys accelerations-per-obj))]
-      (pmap #(let [x-vel     (get % :x-vel 0)
-                   y-vel     (get % :y-vel 0)
-                   new-x     (+ (:x %) x-vel)
-                   new-y     (+ (:y %) y-vel)
-                   new-x-vel (+ x-vel (::x-accel %))
-                   new-y-vel (+ y-vel (::y-accel %))
-                   radius    (radius %)]
-               (assoc % :x     new-x
-                        :y     new-y
-                        :x-vel (* new-x-vel
-                                  (if (and bounce-at-edge?
-                                           (or (and (< (- new-x radius) min-x) (neg? new-x-vel))
-                                               (and (> (+ new-x radius) max-x) (pos? new-x-vel))))
-                                    -1
-                                    1))
-                        :y-vel (* new-y-vel
-                                  (if (and bounce-at-edge?
-                                           (or (and (< (- new-y radius) min-y) (neg? new-y-vel))
-                                               (and (> (+ new-y radius) max-y) (pos? new-y-vel))))
-                                    -1
-                                    1))))
-            net-accelerations))))
+                                          (keys accelerations-per-obj))]
+      (e/pmap* #(let [x-vel     (get % :x-vel 0)
+                      y-vel     (get % :y-vel 0)
+                      new-x     (+ (:x %) x-vel)
+                      new-y     (+ (:y %) y-vel)
+                      new-x-vel (+ x-vel (::x-accel %))
+                      new-y-vel (+ y-vel (::y-accel %))
+                      radius    (radius %)]
+                  (assoc % :x     new-x
+                           :y     new-y
+                           :x-vel (* new-x-vel
+                                     (if (and bounce-at-edge?
+                                              (or (and (< (- new-x radius) min-x) (neg? new-x-vel))
+                                                  (and (> (+ new-x radius) max-x) (pos? new-x-vel))))
+                                       -1
+                                       1))
+                           :y-vel (* new-y-vel
+                                     (if (and bounce-at-edge?
+                                              (or (and (< (- new-y radius) min-y) (neg? new-y-vel))
+                                                  (and (> (+ new-y radius) max-y) (pos? new-y-vel))))
+                                       -1
+                                       1))))
+               net-accelerations))))
 
 (defn- collided?
   "Have the two objects collided?"
@@ -217,7 +219,7 @@
       (let [new-group (find-next-collision-group remaining-objs)]
         (recur (remove (set new-group) remaining-objs)
                (conj groups new-group)))
-      (pmap merge-objects groups))))
+      (e/pmap* merge-objects groups))))
 
 (defn step-simul
   "Produces a new set of objects, based on the gravitational force the input set of objects apply on each other.

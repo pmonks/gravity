@@ -45,3 +45,4 @@
        :y      (rand-int-in-range border (- height border))
        :x-vel  (- (rand double-max-starting-vel) max-starting-vel)
        :y-vel  (- (rand double-max-starting-vel) max-starting-vel)})))
+
