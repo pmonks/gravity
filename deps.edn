@@ -25,20 +25,20 @@
         com.github.pmonks/embroidery   {:mvn/version "0.1.13"}}
  :aliases {
     ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
-    :flames {:extra-deps {flames/flames {:mvn/version "0.5.0"}}}
+    :flames {:extra-deps {flames/flames {:mvn/version "RELEASE"}}}
 
     ; clj -M:check
     :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
-    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.7.1147"}}
+    :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                :main-opts ["-m" "antq.core"]}
     ; clj -M:kondo
     :kondo
-      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2023.12.15"}}
+      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
        :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "resources"]}
     ; clj -M:eastwood
     :eastwood
-      {:extra-deps {jonase/eastwood {:mvn/version "1.4.2"}}
+      {:extra-deps {jonase/eastwood {:mvn/version "RELEASE"}}
        :main-opts  ["-m" "eastwood.lint" {:source-paths ["src" "resources"]}]}
     }}
