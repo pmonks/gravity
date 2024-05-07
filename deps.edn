@@ -18,17 +18,17 @@
 ;
 
 {:paths ["src" "resources"]
- :deps {org.clojure/clojure            {:mvn/version "1.11.1"}
+ :deps {org.clojure/clojure            {:mvn/version "1.11.3"}
         clojure2d/clojure2d            {:mvn/version "1.4.5"}
         org.clojure/math.combinatorics {:mvn/version "0.3.0"}
-        ch.qos.logback/logback-classic {:mvn/version "1.5.0"}
+        ch.qos.logback/logback-classic {:mvn/version "1.5.6"}
         com.github.pmonks/embroidery   {:mvn/version "0.1.20"}}
  :aliases {
     ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
     :flames {:extra-deps {flames/flames {:mvn/version "RELEASE"}}}
 
     ; clj -M:check
-    :check    {:extra-deps {com.github.athos/clj-check {:git/sha "518d5a1cbfcd7c952f548e6dbfcb9a4a5faf9062"}}
+    :check    {:extra-deps {com.github.athos/clj-check {:git/sha "d997df866b2a04b7ce7b17533093ee0a2e2cb729"}}
                :main-opts  ["-m" "clj-check.check"]}
     ; clj -M:outdated
     :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
