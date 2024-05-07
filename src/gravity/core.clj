@@ -19,8 +19,7 @@
 
 (ns gravity.core
   (:require [clojure.math.combinatorics :as comb]
-            [embroidery.api             :as e]
-            [gravity.util               :as u]))
+            [embroidery.api             :as e]))
 
 ; Note: because we store numbers in maps, we cannot have fully unboxed numbers (the JVM doesn't (yet) support primitives in maps)
 ;(set! *warn-on-reflection* true)
