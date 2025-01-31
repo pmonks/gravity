@@ -18,11 +18,11 @@
 ;
 
 {:paths ["src" "resources"]
- :deps {org.clojure/clojure            {:mvn/version "1.11.3"}
+ :deps {org.clojure/clojure            {:mvn/version "1.12.0"}
         clojure2d/clojure2d            {:mvn/version "1.4.5"}
         org.clojure/math.combinatorics {:mvn/version "0.3.0"}
-        ch.qos.logback/logback-classic {:mvn/version "1.5.6"}
-        com.github.pmonks/embroidery   {:mvn/version "0.1.20"}}
+        ch.qos.logback/logback-classic {:mvn/version "1.5.16"}
+        com.github.pmonks/embroidery   {:mvn/version "1.0.44"}}
  :aliases {
     ; clj -A:flames -i init.clj -r, then REPL usage as per https://github.com/jstepien/flames#usage
     :flames {:extra-deps {flames/flames {:mvn/version "RELEASE"}}}
