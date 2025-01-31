@@ -27,7 +27,7 @@
 
 (def ^{:tag 'double} G                       1.5)    ; Our dodgy version of the gravitational constant
 (def ^{:tag 'double} mass-factor             1.25)   ; Exponent for mass, to help keep the simulation compact
-(def ^{:tag 'double} mass-to-radius-exponent 0.6)    ; Exponent of mass to radius. Real value for stars is ~0.8.
+(def ^{:tag 'double} mass-to-radius-exponent 0.6)    ; Exponent of mass to radius. Value for real stars is ~0.8 on average (with broad variance based on temperature)
 
 (defmacro sq
   "The square of x."
