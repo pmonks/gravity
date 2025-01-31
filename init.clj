@@ -25,17 +25,25 @@
 (def width  (- (clojure2d.core/screen-width) 50))
 (def height (- (clojure2d.core/screen-height) 50))
 
+; Handy function for simulation
+(defn sim
+  "Open a new simulation window intitialised with a random assortment of between
+  `min-objs` and `max-objs` objects, and with the optional `opts` (as for
+  [gravity.gui/simulate])."
+  [min-objs max-objs & opts]
+  (gg/simulate width height (gu/gen-random-objs min-objs max-objs width height) opts))
+
 (println "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
 (flush)
 
-; Run a simulation with a random number of randomly placed objects
-(gg/simulate width height (gu/gen-random-objs 50 200 width height))
+; Run a simulation with between 50 and 200 randomly placed objects
+(sim 50 200)
 
-(println "\nℹ️  To run another simulations of between X and Y random objects, run:\n")
-(println "    (gg/simulate width height (gu/gen-random-objs X Y width height))\n")
-(println "  or, to show trails:\n")
-(println "    (gg/simulate width height (gu/gen-random-objs X Y width height) :trails true)\n")
+(println "\nℹ️  To run a simulation with between X and Y random objects, run:\n")
+(println "    (sim X Y)\n")
+(println "  To show trails:\n")
+(println "    (sim X Y {:trails true})\n")
 (flush)
 
 ; To regenerate the demo gif
-;(gg/simulate 800 600 (gu/gen-random-objs 30 30 800 600))
+;(sim 30 30)
