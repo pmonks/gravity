@@ -1,7 +1,10 @@
-[![Build](https://github.com/pmonks/gravity/workflows/CI/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3ACI+branch%3Amain) [![Dependencies](https://github.com/pmonks/gravity/workflows/dependencies/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Adependencies+branch%3Amain) [![Open Issues](https://img.shields.io/github/issues/pmonks/gravity.svg)](https://github.com/pmonks/gravity/issues) [![License](https://img.shields.io/github/license/pmonks/gravity.svg)](https://github.com/pmonks/gravity/blob/main/COPYING)
-
-
 # gravity
+
+[![Build](https://github.com/pmonks/gravity/workflows/CI/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3ACI+branch%3Amain)
+[![Dependencies](https://github.com/pmonks/gravity/workflows/dependencies/badge.svg?branch=main)](https://github.com/pmonks/gravity/actions?query=workflow%3Adependencies+branch%3Amain)
+[![Open Issues](https://img.shields.io/github/issues/pmonks/gravity.svg)](https://github.com/pmonks/gravity/issues)
+[![License](https://img.shields.io/github/license/pmonks/gravity.svg)](https://github.com/pmonks/gravity/blob/main/COPYING)
+![Maintained](https://badges.ws/badge/?label=maintained&value=yes,+at+author's+discretion)
 
 A micro codebase that plays around with some mathematically dubious riffs on Newton's law of universal gravitation, in order to produce some pretty (though unrealistic) animations:
 
