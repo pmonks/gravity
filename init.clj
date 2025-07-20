@@ -29,9 +29,11 @@
 (defn sim
   "Open a new simulation window intitialised with a random assortment of between
   `min-objs` and `max-objs` objects, and with the optional `opts` (as for
-  [gravity.gui/simulate])."
-  [min-objs max-objs & opts]
-  (gg/simulate width height (gu/gen-random-objs min-objs max-objs width height) opts))
+  [gravity.gui/simulate]). Returns `nil`."
+  ([min-objs max-objs] (sim min-objs max-objs nil))
+  ([min-objs max-objs opts]
+   (gg/simulate width height (gu/gen-random-objs min-objs max-objs width height) opts)
+   nil))
 
 (println "\nℹ️  Look for the Java GUI window, bring it into focus, and after 5 seconds an initial random simulation will start.  Press any key to close the window.")
 (flush)
@@ -42,7 +44,7 @@
 (println "\nℹ️  To run a simulation with between X and Y random objects, run:\n")
 (println "    (sim X Y)\n")
 (println "  To show trails:\n")
-(println "    (sim X Y {:trails true})\n")
+(println "    (sim X Y {:trails? true})\n")
 (flush)
 
 ; To regenerate the demo gif

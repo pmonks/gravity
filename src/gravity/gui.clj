@@ -43,10 +43,10 @@
   "Draws one frame of the simulation and then steps it forward"
   [c w _ _]
   (try
-    (let [{objs            :objs
-           collisions?     :collisions
-           bounces?        :bounces
-           trails?         :trails :as state} (c2d/get-state w)]
+    (let [{objs        :objs
+           collisions? :collisions?
+           bounces?    :bounces?
+           trails?     :trails? :as state} (c2d/get-state w)]
       (when-not trails?
         (c2d/with-canvas-> c
           (c2d/set-color :black)
@@ -71,16 +71,16 @@
 (defn simulate
   "Opens a window of size width x height and simulates the given set of objects in it, continuing until the window is
    closed or the 'q' key is pressed.  Returns a handle to the window."
-  [width height objs & {:keys [collisions bounces trails]
-                        :or {collisions true bounces true trails false}}]
+  [width height objs & {:keys [collisions? bounces? trails?]
+                        :or {collisions? true bounces? true trails? false}}]
   (let [window-name (str window-name-prefix " " @window-number)
         window      (c2d/show-window {:canvas      (c2d/canvas width height)
                                       :window-name window-name
                                       :background  :black
-                                      :state       {:objs       objs
-                                                    :collisions collisions
-                                                    :bounces    bounces
-                                                    :trails     trails}
+                                      :state       {:objs        objs
+                                                    :collisions? collisions?
+                                                    :bounces?    bounces?
+                                                    :trails?     trails?}
                                       :draw-fn     draw-frame})]
     (swap! window-number inc)
     (swap! window-registry #(assoc % window-name window))

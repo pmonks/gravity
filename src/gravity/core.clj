@@ -105,6 +105,7 @@
     ::accel (accel-rect obj2 obj1)}])
 
 (defn pmapcat
+  "Parallel version of mapcat, using virtual threads if available."
   [f batches]
   (->> batches
        (e/pmap* f)
